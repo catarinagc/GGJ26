@@ -690,6 +690,7 @@ MonoBehaviour:
   _combatData: {fileID: 11400000, guid: cda8b263a9a7b4a4b8dd5f8a2d3e7c4c, type: 2}
   _projectilePrefab: {fileID: 130903374502388314, guid: bd4d125dff59eca4fbb261f22bed5eaf, type: 3}
   _projectileSpawnPoint: {fileID: 253243724}
+  _slashEffectPrefab: {fileID: 6617557182128064349, guid: e4ae33403708957429600d88d3de1eda, type: 3}
   _hitboxPivot: {fileID: 0}
   _enemyLayer:
     serializedVersion: 2

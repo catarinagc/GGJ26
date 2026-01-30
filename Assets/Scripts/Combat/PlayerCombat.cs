@@ -16,6 +16,9 @@ namespace Combat
         [SerializeField] private GameObject _projectilePrefab;
         [SerializeField] private Transform _projectileSpawnPoint;
 
+        [Header("Slash Effect")]
+        [SerializeField] private GameObject _slashEffectPrefab;
+
         [Header("Hitbox")]
         [SerializeField] private Transform _hitboxPivot;
         [SerializeField] private LayerMask _enemyLayer;
@@ -51,6 +54,17 @@ namespace Combat
             {
                 Debug.LogWarning("CombatData not assigned to PlayerCombat. Using default values.");
             }
+        }
+
+        private void OnEnable()
+        {
+            // Subscribe to our own event to spawn slash effect
+            OnAttackPerformed += SpawnSlashEffect;
+        }
+
+        private void OnDisable()
+        {
+            OnAttackPerformed -= SpawnSlashEffect;
         }
 
         private void Update()
@@ -114,6 +128,8 @@ namespace Combat
             _isAttacking = true;
             _attackTimer = GetAttackDuration();
 
+            Debug.Log($"[Combat] Melee Attack! Combo Hit: {_currentComboIndex + 1}/{GetMaxComboHits()}, Damage: {GetCurrentComboDamage()}");
+
             // Perform hitbox check
             PerformMeleeHitboxCheck();
 
@@ -152,12 +168,37 @@ namespace Combat
                     // Calculate knockback direction (away from player)
                     Vector2 knockbackDir = ((Vector2)hit.transform.position - (Vector2)transform.position).normalized;
                     
+                    // Debug log when hitting IDamageable
+                    Debug.Log($"[Combat] HIT! Target: {hit.gameObject.name}, Damage: {GetCurrentComboDamage()}, Knockback: {knockbackDir}");
+                    
                     // Apply damage
                     damageable.TakeDamage(GetCurrentComboDamage(), knockbackDir, GetMeleeKnockbackForce());
 
                     // Apply recoil to player
                     ApplyRecoil(-knockbackDir);
                 }
+            }
+        }
+
+        private void SpawnSlashEffect(int comboIndex)
+        {
+            if (_slashEffectPrefab == null) return;
+
+            Vector2 hitboxCenter = GetHitboxCenter();
+            float facingAngle = transform.localScale.x >= 0 ? 0f : 180f;
+            
+            // Vary the angle slightly based on combo index for visual variety
+            float angleOffset = (comboIndex - 1) * 15f;
+            Quaternion rotation = Quaternion.Euler(0, 0, facingAngle + angleOffset);
+
+            GameObject slashObj = Instantiate(_slashEffectPrefab, hitboxCenter, rotation);
+            
+            // Flip the slash effect if facing left
+            if (transform.localScale.x < 0)
+            {
+                Vector3 scale = slashObj.transform.localScale;
+                scale.x *= -1;
+                slashObj.transform.localScale = scale;
             }
         }
 
@@ -181,13 +222,21 @@ namespace Combat
             OnComboReset?.Invoke();
         }
 
-        private Vector2 GetHitboxCenter()
+        /// <summary>
+        /// Gets the center position of the melee hitbox in world space.
+        /// </summary>
+        public Vector2 GetHitboxCenter()
         {
             Vector2 offset = GetHitboxOffset();
             // Flip offset based on facing direction
             offset.x *= Mathf.Sign(transform.localScale.x);
             return (Vector2)transform.position + offset;
         }
+
+        /// <summary>
+        /// Returns true if currently in an attack animation.
+        /// </summary>
+        public bool IsAttacking => _isAttacking;
 
         #endregion
 
@@ -294,20 +343,45 @@ namespace Combat
 
         #region Gizmos
 
-        private void OnDrawGizmosSelected()
+        private void OnDrawGizmos()
         {
             if (!_showHitboxGizmos) return;
 
-            // Draw melee hitbox
-            Gizmos.color = _isAttacking ? Color.red : Color.yellow;
+            // Draw melee hitbox - RED when attacking, YELLOW when idle
+            Gizmos.color = _isAttacking ? Color.red : new Color(1f, 1f, 0f, 0.3f);
             Vector2 center = GetHitboxCenter();
             Vector2 size = GetHitboxSize();
-            Gizmos.DrawWireCube(center, size);
+            
+            if (_isAttacking)
+            {
+                // Solid cube when attacking for better visibility
+                Gizmos.DrawCube(center, size);
+            }
+            else
+            {
+                // Wire cube when not attacking
+                Gizmos.DrawWireCube(center, size);
+            }
 
             // Draw aim direction
             Gizmos.color = Color.cyan;
             Vector3 aimStart = _projectileSpawnPoint != null ? _projectileSpawnPoint.position : transform.position;
             Gizmos.DrawRay(aimStart, _aimDirection * 2f);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            if (!_showHitboxGizmos) return;
+
+            // Draw more detailed hitbox when selected
+            Gizmos.color = _isAttacking ? Color.red : Color.yellow;
+            Vector2 center = GetHitboxCenter();
+            Vector2 size = GetHitboxSize();
+            Gizmos.DrawWireCube(center, size);
+
+            // Draw hitbox offset line
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position, center);
         }
 
         #endregion
