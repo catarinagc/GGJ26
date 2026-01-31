@@ -19,9 +19,9 @@ namespace Enemy
 
         [Header("AI Settings")]
         [SerializeField] private AIState _currentState = AIState.Patrol;
-        [SerializeField] private float _detectionRange = 8f;
-        [SerializeField] private float _attackRange = 1.5f;
-        [SerializeField] private float _loseTargetRange = 12f;
+        [SerializeField] private float _detectionRange = 20f;
+        [SerializeField] private float _attackRange = 15f;
+        [SerializeField] private float _loseTargetRange = 30f;
         [SerializeField] private LayerMask _playerLayer;
 
         [Header("Patrol Settings")]
@@ -44,13 +44,17 @@ namespace Enemy
         [SerializeField] private float _attackDuration = 0.3f;
 
         [Header("Contact Damage")]
-        [SerializeField] private bool _dealContactDamage = true;
+        [SerializeField] private bool _dealContactDamage = false;
         [SerializeField] private float _contactDamage = 5f;
         [SerializeField] private float _contactKnockbackForce = 6f;
         [SerializeField] private float _contactDamageCooldown = 0.5f;
 
         [Header("Debug")]
         [SerializeField] private bool _showDebugGizmos = true;
+
+        [Header("Projectile")]
+        [SerializeField] private GameObject _projectilePrefab;
+        private float _rangedCooldownTimer;
 
         // Components
         private Rigidbody2D _rb;
@@ -72,6 +76,7 @@ namespace Enemy
 
         // Properties
         public AIState CurrentState => _currentState;
+
 
         protected override void Awake()
         {
@@ -151,23 +156,31 @@ namespace Enemy
 
                 case AIState.Chase:
                     // Transition to Attack if close enough
-                    if (distanceToPlayer <= _attackRange && _attackCooldownTimer <= 0)
-                    {
-                        TransitionToState(AIState.Attack);
-                    }
+                    //if (distanceToPlayer <= _attackRange && _attackCooldownTimer <= 0)
+                    //{
+                    //    TransitionToState(AIState.Attack);
+                    //}
                     // Transition back to Patrol if player is too far
-                    else if (distanceToPlayer > _loseTargetRange || _playerTransform == null)
-                    {
-                        TransitionToState(AIState.Patrol);
-                    }
+                    //else if
+                    //if (distanceToPlayer > _loseTargetRange || _playerTransform == null)
+                    //{
+                    //    TransitionToState(AIState.Patrol);
+                    //}
+                    //break;
+                    if (distanceToPlayer <= _attackRange)
+                        TransitionToState(AIState.Attack);
                     break;
 
                 case AIState.Attack:
                     // Transition back to Chase after attack completes
-                    if (!_isAttacking)
-                    {
+                    //if (!_isAttacking)
+                    //{
+                    //    TransitionToState(AIState.Chase);
+                    //}
+                    //break;
+
+                    if (distanceToPlayer > _attackRange)
                         TransitionToState(AIState.Chase);
-                    }
                     break;
             }
         }
@@ -185,7 +198,9 @@ namespace Enemy
                     break;
 
                 case AIState.Attack:
-                    ExecuteAttack();
+                //ExecuteAttack();
+                    _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y);
+                    enemyRangedAttack();
                     break;
             }
         }
@@ -212,7 +227,9 @@ namespace Enemy
             switch (newState)
             {
                 case AIState.Attack:
-                    StartAttack();
+                    //StartAttack();
+                    _rb.linearVelocity = Vector2.zero;
+                    enemyRangedAttack();
                     break;
             }
         }
@@ -282,62 +299,98 @@ namespace Enemy
             if (_playerTransform == null) return;
 
             Vector2 direction = ((Vector2)_playerTransform.position - (Vector2)transform.position).normalized;
-            
+
             // Only move horizontally
             MoveHorizontally(direction.x, _chaseSpeed);
             UpdateFacing(direction.x);
         }
-
+    
         #endregion
 
         #region Attack
 
-        private void StartAttack()
+        //private void StartAttack()
+        //{
+        //    _isAttacking = true;
+        //    _attackTimer = _attackDuration;
+        //    _attackCooldownTimer = _attackCooldown;
+
+        //    // Stop movement during attack
+        //    _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y);
+
+        //    // Perform the attack hitbox check
+        //    PerformAttackHitboxCheck();
+        //}
+
+        //private void ExecuteAttack()
+        //{
+        //    // Keep stationary during attack
+        //    _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y);
+
+        //    enemyRangedAttack();
+
+        //    _attackTimer -= Time.fixedDeltaTime;
+        //    if (_attackTimer <= 0)
+        //    {
+        //        _isAttacking = false;
+        //    }
+        //}
+
+        private void enemyRangedAttack()
         {
-            _isAttacking = true;
-            _attackTimer = _attackDuration;
-            _attackCooldownTimer = _attackCooldown;
+            if (_rangedCooldownTimer > 0) return;
+            //get player positions
+            Vector3 playerPos = _playerTransform.position;
+            //spwan projectile in that direction
+            Vector3 shootDir = playerPos - transform.position;
+            Vector2 spawnPos = transform.position;
+            GameObject projectileObj = Instantiate(_projectilePrefab, spawnPos, Quaternion.identity);
 
-            // Stop movement during attack
-            _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y);
-
-            // Perform the attack hitbox check
-            PerformAttackHitboxCheck();
-        }
-
-        private void ExecuteAttack()
-        {
-            // Keep stationary during attack
-            _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y);
-
-            _attackTimer -= Time.fixedDeltaTime;
-            if (_attackTimer <= 0)
+            Projectile projectile = projectileObj.GetComponent<Projectile>();
+            if (projectile != null)
             {
-                _isAttacking = false;
+                // Apply damage multiplier to projectile damage
+                float effectiveProjectileDamage = GetProjectileDamage();
+
+                projectile.Initialize(
+                    shootDir,
+                    GetProjectileSpeed(),
+                    effectiveProjectileDamage,
+                    GetRangedKnockbackForce(),
+                    GetProjectileLifetime(),
+                    _playerLayer
+                );
             }
+
+            // Start cooldown
+            _rangedCooldownTimer = GetRangedCooldown();
+
+            // Fire event
+            //OnProjectileFired?.Invoke(fireDirection);
+            //damage from projectile
         }
 
-        private void PerformAttackHitboxCheck()
-        {
-            Vector2 hitboxCenter = GetAttackHitboxCenter();
+        //private void PerformAttackHitboxCheck()
+        //{
+        //    Vector2 hitboxCenter = GetAttackHitboxCenter();
 
-            // Find all colliders in hitbox
-            Collider2D[] hits = Physics2D.OverlapBoxAll(hitboxCenter, _attackHitboxSize, 0f, _playerLayer);
+        //    // Find all colliders in hitbox
+        //    Collider2D[] hits = Physics2D.OverlapBoxAll(hitboxCenter, _attackHitboxSize, 0f, _playerLayer);
 
-            foreach (Collider2D hit in hits)
-            {
-                IDamageable damageable = hit.GetComponent<IDamageable>();
-                if (damageable != null)
-                {
-                    // Calculate knockback direction (away from enemy)
-                    Vector2 knockbackDir = ((Vector2)hit.transform.position - (Vector2)transform.position).normalized;
-                    
-                    Debug.Log($"[EnemyAI] {gameObject.name} ATTACK HIT! Target: {hit.gameObject.name}, Damage: {_attackDamage}");
-                    
-                    damageable.TakeDamage(_attackDamage, knockbackDir, _attackKnockbackForce);
-                }
-            }
-        }
+        //    foreach (Collider2D hit in hits)
+        //    {
+        //        IDamageable damageable = hit.GetComponent<IDamageable>();
+        //        if (damageable != null)
+        //        {
+        //            // Calculate knockback direction (away from enemy)
+        //            Vector2 knockbackDir = ((Vector2)hit.transform.position - (Vector2)transform.position).normalized;
+
+        //            Debug.Log($"[EnemyAI] {gameObject.name} ATTACK HIT! Target: {hit.gameObject.name}, Damage: {_attackDamage}");
+
+        //            damageable.TakeDamage(_attackDamage, knockbackDir, _attackKnockbackForce);
+        //        }
+        //    }
+        //}
 
         private Vector2 GetAttackHitboxCenter()
         {
@@ -387,13 +440,25 @@ namespace Enemy
             {
                 _contactDamageTimer -= Time.deltaTime;
             }
+
+            if (_rangedCooldownTimer > 0)
+            {
+                _rangedCooldownTimer -= Time.deltaTime;
+            }
         }
+
+        //private float GetDistanceToPlayer()
+        //{
+        //    if (_playerTransform == null) return float.MaxValue;
+        //    return Vector2.Distance(transform.position, _playerTransform.position);
+        //}
 
         private float GetDistanceToPlayer()
         {
             if (_playerTransform == null) return float.MaxValue;
-            return Vector2.Distance(transform.position, _playerTransform.position);
+            return Mathf.Abs(transform.position.x - _playerTransform.position.x);
         }
+
 
         private void MoveHorizontally(float direction, float speed)
         {
@@ -468,5 +533,11 @@ namespace Enemy
         }
 
         #endregion
+
+        private float GetProjectileDamage() =>  8f;
+        private float GetProjectileSpeed() =>  15f;
+        private float GetProjectileLifetime() =>  3f;
+        private float GetRangedCooldown() =>  0.2f;
+        private float GetRangedKnockbackForce() =>  3f;
     }
 }
