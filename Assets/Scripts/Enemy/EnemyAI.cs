@@ -6,6 +6,7 @@ namespace Enemy
     /// <summary>
     /// Enemy AI with a simple State Machine: Patrol, Chase, Attack.
     /// Extends EnemyBase for health and damage handling.
+    /// Now integrates with EnemyCombat for Magic Sword attacks.
     /// </summary>
     [RequireComponent(typeof(Rigidbody2D))]
     public class EnemyAI : EnemyBase
@@ -36,6 +37,11 @@ namespace Enemy
         [SerializeField] private float _chaseSpeed = 5f;
 
         [Header("Attack Settings")]
+        [SerializeField] private float _attackTelegraphTime = 0.2f; // Brief pause before attack to telegraph
+        [Tooltip("If true, uses EnemyCombat component for Magic Sword attacks. If false, uses legacy hitbox attack.")]
+        [SerializeField] private bool _useMagicSwordCombat = true;
+
+        [Header("Legacy Attack Settings (used if Magic Sword disabled)")]
         [SerializeField] private float _attackDamage = 10f;
         [SerializeField] private float _attackCooldown = 1f;
         [SerializeField] private float _attackKnockbackForce = 8f;
@@ -44,7 +50,7 @@ namespace Enemy
         [SerializeField] private float _attackDuration = 0.3f;
 
         [Header("Contact Damage")]
-        [SerializeField] private bool _dealContactDamage = true;
+        [SerializeField] private bool _dealContactDamage = false; // Disabled by default when using Magic Sword
         [SerializeField] private float _contactDamage = 5f;
         [SerializeField] private float _contactKnockbackForce = 6f;
         [SerializeField] private float _contactDamageCooldown = 0.5f;
@@ -55,6 +61,7 @@ namespace Enemy
         // Components
         private Rigidbody2D _rb;
         private Transform _playerTransform;
+        private EnemyCombat _enemyCombat;
 
         // Patrol State
         private Vector2 _patrolTargetPosition;
@@ -66,6 +73,8 @@ namespace Enemy
         private float _attackCooldownTimer;
         private bool _isAttacking;
         private float _attackTimer;
+        private float _telegraphTimer;
+        private bool _isTelegraphing;
 
         // Contact Damage
         private float _contactDamageTimer;
@@ -77,6 +86,7 @@ namespace Enemy
         {
             base.Awake();
             _rb = GetComponent<Rigidbody2D>();
+            _enemyCombat = GetComponent<EnemyCombat>();
 
             // Configure Rigidbody2D for consistent physics
             _rb.gravityScale = 3f;
@@ -87,6 +97,12 @@ namespace Enemy
             if (_useLocalPatrolPoints && (_patrolPointA == null || _patrolPointB == null))
             {
                 InitializeLocalPatrolPoints();
+            }
+
+            // Warn if Magic Sword combat is enabled but no EnemyCombat component
+            if (_useMagicSwordCombat && _enemyCombat == null)
+            {
+                Debug.LogWarning($"[EnemyAI] {gameObject.name}: Magic Sword combat enabled but no EnemyCombat component found! Add EnemyCombat component or disable Magic Sword combat.");
             }
         }
 
@@ -150,8 +166,8 @@ namespace Enemy
                     break;
 
                 case AIState.Chase:
-                    // Transition to Attack if close enough
-                    if (distanceToPlayer <= _attackRange && _attackCooldownTimer <= 0)
+                    // Transition to Attack if close enough and can attack
+                    if (distanceToPlayer <= _attackRange && CanAttack())
                     {
                         TransitionToState(AIState.Attack);
                     }
@@ -164,7 +180,7 @@ namespace Enemy
 
                 case AIState.Attack:
                     // Transition back to Chase after attack completes
-                    if (!_isAttacking)
+                    if (!_isAttacking && !_isTelegraphing)
                     {
                         TransitionToState(AIState.Chase);
                     }
@@ -202,6 +218,7 @@ namespace Enemy
                     break;
                 case AIState.Attack:
                     _isAttacking = false;
+                    _isTelegraphing = false;
                     break;
             }
 
@@ -292,17 +309,35 @@ namespace Enemy
 
         #region Attack
 
+        /// <summary>
+        /// Checks if the enemy can attack based on cooldown and combat system.
+        /// </summary>
+        private bool CanAttack()
+        {
+            if (_useMagicSwordCombat && _enemyCombat != null)
+            {
+                return _enemyCombat.CanAttack();
+            }
+            return _attackCooldownTimer <= 0;
+        }
+
         private void StartAttack()
         {
-            _isAttacking = true;
-            _attackTimer = _attackDuration;
-            _attackCooldownTimer = _attackCooldown;
-
-            // Stop movement during attack
+            // Stop movement during attack telegraph
             _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y);
 
-            // Perform the attack hitbox check
-            PerformAttackHitboxCheck();
+            // Face the player before attacking
+            if (_playerTransform != null)
+            {
+                float directionToPlayer = _playerTransform.position.x - transform.position.x;
+                UpdateFacing(directionToPlayer);
+            }
+
+            // Start telegraph phase (brief pause to signal attack)
+            _isTelegraphing = true;
+            _telegraphTimer = _attackTelegraphTime;
+
+            Debug.Log($"[EnemyAI] {gameObject.name}: Telegraphing attack...");
         }
 
         private void ExecuteAttack()
@@ -310,14 +345,57 @@ namespace Enemy
             // Keep stationary during attack
             _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y);
 
-            _attackTimer -= Time.fixedDeltaTime;
-            if (_attackTimer <= 0)
+            // Telegraph phase - brief pause before attack
+            if (_isTelegraphing)
             {
-                _isAttacking = false;
+                _telegraphTimer -= Time.fixedDeltaTime;
+                if (_telegraphTimer <= 0)
+                {
+                    _isTelegraphing = false;
+                    PerformActualAttack();
+                }
+                return;
+            }
+
+            // Attack duration phase
+            if (_isAttacking)
+            {
+                _attackTimer -= Time.fixedDeltaTime;
+                if (_attackTimer <= 0)
+                {
+                    _isAttacking = false;
+                }
             }
         }
 
-        private void PerformAttackHitboxCheck()
+        /// <summary>
+        /// Performs the actual attack using either Magic Sword combat or legacy hitbox.
+        /// </summary>
+        private void PerformActualAttack()
+        {
+            _isAttacking = true;
+
+            if (_useMagicSwordCombat && _enemyCombat != null)
+            {
+                // Use Magic Sword combat system
+                _enemyCombat.PerformEnemyAttack();
+                _attackTimer = _enemyCombat.AttackDuration;
+                Debug.Log($"[EnemyAI] {gameObject.name}: Magic Sword attack!");
+            }
+            else
+            {
+                // Use legacy hitbox attack
+                _attackTimer = _attackDuration;
+                _attackCooldownTimer = _attackCooldown;
+                PerformLegacyAttackHitboxCheck();
+                Debug.Log($"[EnemyAI] {gameObject.name}: Legacy attack!");
+            }
+        }
+
+        /// <summary>
+        /// Legacy attack hitbox check (used when Magic Sword combat is disabled).
+        /// </summary>
+        private void PerformLegacyAttackHitboxCheck()
         {
             Vector2 hitboxCenter = GetAttackHitboxCenter();
 
@@ -332,7 +410,7 @@ namespace Enemy
                     // Calculate knockback direction (away from enemy)
                     Vector2 knockbackDir = ((Vector2)hit.transform.position - (Vector2)transform.position).normalized;
 
-                    Debug.Log($"[EnemyAI] {gameObject.name} ATTACK HIT! Target: {hit.gameObject.name}, Damage: {_attackDamage}");
+                    Debug.Log($"[EnemyAI] {gameObject.name} LEGACY ATTACK HIT! Target: {hit.gameObject.name}, Damage: {_attackDamage}");
 
                     damageable.TakeDamage(_attackDamage, knockbackDir, _attackKnockbackForce);
                 }
@@ -461,10 +539,13 @@ namespace Enemy
         {
             if (!_showDebugGizmos) return;
 
-            // Attack hitbox
-            Gizmos.color = _isAttacking ? Color.red : new Color(1f, 0.5f, 0f, 0.5f);
-            Vector2 hitboxCenter = GetAttackHitboxCenter();
-            Gizmos.DrawWireCube(hitboxCenter, _attackHitboxSize);
+            // Attack hitbox (only show if not using Magic Sword combat)
+            if (!_useMagicSwordCombat)
+            {
+                Gizmos.color = _isAttacking ? Color.red : new Color(1f, 0.5f, 0f, 0.5f);
+                Vector2 hitboxCenter = GetAttackHitboxCenter();
+                Gizmos.DrawWireCube(hitboxCenter, _attackHitboxSize);
+            }
         }
 
         #endregion
