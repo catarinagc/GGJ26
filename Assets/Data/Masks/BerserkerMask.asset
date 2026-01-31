@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efa8e0bc337042042abf585eb2668507, type: 3}
+  m_Name: BerserkerMask
+  m_EditorClassIdentifier: 
+  _maskName: Berserker Mask
+  _icon: {fileID: 0}
+  _description: A fearsome mask that channels raw fury. The wearer deals devastating
+    damage but sacrifices some agility.
+  _speedMultiplier: 0.9
+  _damageMultiplier: 1.5
+  _jumpForceBonus: 0
+  _abilityPrefab: {fileID: 6901515901364485248, guid: 53cab39863208e248a8746008db74011, type: 3}

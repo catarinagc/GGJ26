@@ -3,16 +3,16 @@ using UnityEngine;
 namespace Masks.Abilities
 {
     /// <summary>
-    /// Trickster Mask ability implementation.
-    /// The Trickster mask grants increased speed and could have a special ability
-    /// like a quick dash or afterimage effect.
+    /// Berserker Mask ability implementation.
+    /// The Berserker mask grants increased damage but could have drawbacks.
+    /// Active ability: Rage mode - temporary massive damage boost.
     /// </summary>
-    public class TricksterAbility : MonoBehaviour, IMaskAbility
+    public class BerserkerAbility : MonoBehaviour, IMaskAbility
     {
         [Header("Ability Settings")]
-        [SerializeField] private float _abilityCooldown = 5f;
-        [SerializeField] private float _abilityDuration = 2f;
-        [SerializeField] private float _bonusSpeedDuringAbility = 1.5f;
+        [SerializeField] private float _abilityCooldown = 8f;
+        [SerializeField] private float _abilityDuration = 3f;
+        [SerializeField] private float _rageDamageMultiplier = 2f;
 
         private GameObject _player;
         private float _cooldownTimer;
@@ -30,32 +30,31 @@ namespace Masks.Abilities
             _abilityTimer = 0f;
             _isAbilityActive = false;
 
-            Debug.Log("[TricksterAbility] Equipped! Passive: +20% movement speed.");
+            Debug.Log("[BerserkerAbility] Equipped! Passive: +50% damage output.");
         }
 
         public void OnUnequip(GameObject player)
         {
-            // Clean up any active effects
             if (_isAbilityActive)
             {
                 DeactivateAbility();
             }
 
             _player = null;
-            Debug.Log("[TricksterAbility] Unequipped.");
+            Debug.Log("[BerserkerAbility] Unequipped.");
         }
 
         public void OnAbilityTrigger()
         {
             if (_cooldownTimer > 0)
             {
-                Debug.Log($"[TricksterAbility] Ability on cooldown: {_cooldownTimer:F1}s remaining.");
+                Debug.Log($"[BerserkerAbility] Ability on cooldown: {_cooldownTimer:F1}s remaining.");
                 return;
             }
 
             if (_isAbilityActive)
             {
-                Debug.Log("[TricksterAbility] Ability already active.");
+                Debug.Log("[BerserkerAbility] Ability already active.");
                 return;
             }
 
@@ -64,13 +63,11 @@ namespace Masks.Abilities
 
         private void Update()
         {
-            // Update cooldown
             if (_cooldownTimer > 0)
             {
                 _cooldownTimer -= Time.deltaTime;
             }
 
-            // Update ability duration
             if (_isAbilityActive)
             {
                 _abilityTimer -= Time.deltaTime;
@@ -86,11 +83,7 @@ namespace Masks.Abilities
             _isAbilityActive = true;
             _abilityTimer = _abilityDuration;
 
-            // TODO: Apply bonus speed effect through MaskManager or events
-            // For now, just log the activation
-            Debug.Log($"[TricksterAbility] ACTIVATED! Bonus speed for {_abilityDuration}s.");
-
-            // Visual feedback could be added here (particles, color change, etc.)
+            Debug.Log($"[BerserkerAbility] RAGE ACTIVATED! {_rageDamageMultiplier}x damage for {_abilityDuration}s!");
         }
 
         private void DeactivateAbility()
@@ -98,7 +91,7 @@ namespace Masks.Abilities
             _isAbilityActive = false;
             _cooldownTimer = _abilityCooldown;
 
-            Debug.Log($"[TricksterAbility] Deactivated. Cooldown: {_abilityCooldown}s.");
+            Debug.Log($"[BerserkerAbility] Rage ended. Cooldown: {_abilityCooldown}s.");
         }
     }
 }

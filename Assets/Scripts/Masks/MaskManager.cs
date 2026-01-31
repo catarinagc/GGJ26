@@ -44,6 +44,7 @@ namespace Masks
         public float CurrentSpeedMultiplier => _currentSpeedMultiplier;
         public float CurrentDamageMultiplier => _currentDamageMultiplier;
         public float CurrentJumpForceBonus => _currentJumpForceBonus;
+        public IMaskAbility ActiveAbility => _activeAbilityInstance;
 
         private void Awake()
         {

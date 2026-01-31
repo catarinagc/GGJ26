@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Masks;
-using Masks.Abilities;
 
 namespace UI
 {
@@ -33,7 +32,7 @@ namespace UI
         [Header("Settings")]
         [SerializeField] private bool _hideWhenNoMask = true;
 
-        private TricksterAbility _currentTricksterAbility;
+        private IMaskAbility _currentAbility;
         private CanvasGroup _canvasGroup;
 
         private void Awake()
@@ -101,7 +100,7 @@ namespace UI
 
         private void OnMaskUnequipped(MaskData mask)
         {
-            _currentTricksterAbility = null;
+            _currentAbility = null;
             if (_hideWhenNoMask)
             {
                 SetUIVisibility(false);
@@ -162,11 +161,12 @@ namespace UI
         {
             if (_cooldownBarFill == null) return;
 
-            // Try to get cooldown info from TricksterAbility
-            if (_currentTricksterAbility != null)
+            // Try to get cooldown info from current ability
+            if (_currentAbility != null)
             {
-                float cooldownRemaining = _currentTricksterAbility.CooldownRemaining;
-                bool isActive = _currentTricksterAbility.IsAbilityActive;
+                float cooldownRemaining = _currentAbility.CooldownRemaining;
+                bool isActive = _currentAbility.IsAbilityActive;
+                float totalCooldown = _currentAbility.TotalCooldown;
 
                 if (isActive)
                 {
@@ -183,7 +183,7 @@ namespace UI
                 else if (cooldownRemaining > 0)
                 {
                     // On cooldown - show progress
-                    float maxCooldown = 5f; // Default cooldown time
+                    float maxCooldown = totalCooldown > 0 ? totalCooldown : 5f;
                     _cooldownBarFill.fillAmount = 1f - (cooldownRemaining / maxCooldown);
                     _cooldownBarFill.color = _cooldownColor;
                     
@@ -222,8 +222,11 @@ namespace UI
 
         private void FindAbilityComponent()
         {
-            // Find the TricksterAbility component that was instantiated
-            _currentTricksterAbility = FindAnyObjectByType<TricksterAbility>();
+            // Get the active ability directly from MaskManager
+            if (_maskManager != null)
+            {
+                _currentAbility = _maskManager.ActiveAbility;
+            }
         }
 
         private void SetUIVisibility(bool visible)

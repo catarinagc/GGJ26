@@ -26,5 +26,20 @@ namespace Masks
         /// Called when the player triggers the mask's active ability.
         /// </summary>
         void OnAbilityTrigger();
+
+        /// <summary>
+        /// Gets the remaining cooldown time in seconds.
+        /// </summary>
+        float CooldownRemaining { get; }
+
+        /// <summary>
+        /// Gets whether the ability is currently active.
+        /// </summary>
+        bool IsAbilityActive { get; }
+
+        /// <summary>
+        /// Gets the total cooldown duration for UI progress bars.
+        /// </summary>
+        float TotalCooldown { get; }
     }
 }
