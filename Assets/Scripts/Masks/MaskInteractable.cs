@@ -82,13 +82,30 @@ namespace Masks
 
             // Hide prompt initially
             if (_promptUI != null)
+            {
                 _promptUI.SetActive(false);
+            }
+            else
+            {
+                // Try to find it if not assigned
+                var promptGO = GameObject.Find("Canvas/InteractionPrompt");
+                if (promptGO != null)
+                {
+                    _promptUI = promptGO;
+                    _promptText = promptGO.GetComponentInChildren<Text>();
+                    _promptUI.SetActive(false);
+                }
+            }
         }
 
         private void Start()
         {
             // Setup visual based on mask data
             UpdateVisuals();
+            
+            // Double check UI is hidden
+            if (_promptUI != null)
+                _promptUI.SetActive(false);
         }
 
         private void Update()
@@ -194,6 +211,7 @@ namespace Masks
             {
                 // No previous mask, destroy this pickup
                 Destroy(gameObject, 0.1f);
+                if (_promptUI != null) _promptUI.SetActive(false);
             }
         }
 
