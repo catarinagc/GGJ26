@@ -6,7 +6,7 @@ namespace Player
 {
     /// <summary>
     /// Handles combat input and delegates to PlayerCombat.
-    /// Follows the same pattern as PlayerController for movement.
+    /// Uses a single attack button for the "Magic Sword" system.
     /// </summary>
     public class PlayerCombatController : MonoBehaviour
     {
@@ -14,11 +14,9 @@ namespace Player
         [SerializeField] private InputActionAsset _inputActionAsset;
         [SerializeField] private string _actionMapName = "Player";
         [SerializeField] private string _attackActionName = "Attack";
-        [SerializeField] private string _shootActionName = "Shoot";
         [SerializeField] private string _aimActionName = "Move"; // Use Move for aim direction
 
         private InputAction _attackAction;
-        private InputAction _shootAction;
         private InputAction _aimAction;
 
         private ICombat _combat;
@@ -37,7 +35,6 @@ namespace Player
                 if (map != null)
                 {
                     _attackAction = map.FindAction(_attackActionName);
-                    _shootAction = map.FindAction(_shootActionName);
                     _aimAction = map.FindAction(_aimActionName);
                 }
                 else
@@ -58,11 +55,6 @@ namespace Player
                 _attackAction.Enable();
                 _attackAction.performed += OnAttackPerformed;
             }
-            if (_shootAction != null)
-            {
-                _shootAction.Enable();
-                _shootAction.performed += OnShootPerformed;
-            }
             if (_aimAction != null)
             {
                 _aimAction.Enable();
@@ -76,11 +68,6 @@ namespace Player
                 _attackAction.performed -= OnAttackPerformed;
                 _attackAction.Disable();
             }
-            if (_shootAction != null)
-            {
-                _shootAction.performed -= OnShootPerformed;
-                _shootAction.Disable();
-            }
             if (_aimAction != null)
             {
                 _aimAction.Disable();
@@ -91,20 +78,18 @@ namespace Player
         {
             if (_combat == null) return;
 
-            // Update aim direction continuously
+            // Update aim direction continuously (4-way snapping handled by PlayerCombat)
             Vector2 aimInput = _aimAction != null ? _aimAction.ReadValue<Vector2>() : Vector2.zero;
             _combat.SetAimDirection(aimInput);
         }
 
+        /// <summary>
+        /// Called when the attack button is pressed.
+        /// Triggers the unified "Magic Sword" attack.
+        /// </summary>
         private void OnAttackPerformed(InputAction.CallbackContext context)
         {
-            _combat?.MeleeAttack();
-        }
-
-        private void OnShootPerformed(InputAction.CallbackContext context)
-        {
-            Vector2 aimInput = _aimAction != null ? _aimAction.ReadValue<Vector2>() : Vector2.zero;
-            _combat?.RangedAttack(aimInput);
+            _combat?.PerformAttack();
         }
     }
 }

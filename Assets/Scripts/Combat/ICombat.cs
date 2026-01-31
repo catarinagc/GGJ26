@@ -14,23 +14,19 @@ namespace Combat
         event Action<int> OnAttackPerformed; // int = combo index
 
         /// <summary>
-        /// Event fired when a projectile is fired.
+        /// Event fired when a sword wave projectile is fired.
         /// </summary>
-        event Action<Vector2> OnProjectileFired; // Vector2 = direction
+        event Action<Vector2> OnSwordWaveFired; // Vector2 = direction
 
         /// <summary>
-        /// Perform a melee attack.
+        /// Perform a unified "Magic Sword" attack.
+        /// Melee swing first - if it hits, no projectile.
+        /// If melee misses, spawn a sword wave projectile.
         /// </summary>
-        void MeleeAttack();
+        void PerformAttack();
 
         /// <summary>
-        /// Fire a ranged projectile.
-        /// </summary>
-        /// <param name="direction">Direction to fire.</param>
-        void RangedAttack(Vector2 direction);
-
-        /// <summary>
-        /// Set the aim direction for 8-way shooting.
+        /// Set the aim direction for 4-way attacks.
         /// </summary>
         /// <param name="direction">Raw aim input.</param>
         void SetAimDirection(Vector2 direction);

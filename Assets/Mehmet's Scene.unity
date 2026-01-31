@@ -1008,8 +1008,8 @@ Transform:
   m_GameObject: {fileID: 351298510}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2, z: 0}
-  m_LocalScale: {x: 20, y: 1, z: 1}
+  m_LocalPosition: {x: -2, y: -2, z: 0}
+  m_LocalScale: {x: 78, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1609,11 +1609,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5153555172292738680, guid: 156a981993a2b69479c2d99007cd17ab, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.24
+      value: 6.44
       objectReference: {fileID: 0}
     - target: {fileID: 5153555172292738680, guid: 156a981993a2b69479c2d99007cd17ab, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 5153555172292738680, guid: 156a981993a2b69479c2d99007cd17ab, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2048,7 +2048,7 @@ Transform:
   m_GameObject: {fileID: 584276295}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -31.8, y: -2, z: 0}
+  m_LocalPosition: {x: -51.9, y: -2, z: 0}
   m_LocalScale: {x: 20, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2099,11 +2099,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5153555172292738680, guid: 156a981993a2b69479c2d99007cd17ab, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.66
+      value: 12.49
       objectReference: {fileID: 0}
     - target: {fileID: 5153555172292738680, guid: 156a981993a2b69479c2d99007cd17ab, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0.78
       objectReference: {fileID: 0}
     - target: {fileID: 5153555172292738680, guid: 156a981993a2b69479c2d99007cd17ab, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3803,7 +3803,6 @@ MonoBehaviour:
   _inputActionAsset: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   _actionMapName: Player
   _attackActionName: Attack
-  _shootActionName: Shoot
   _aimActionName: Move
 --- !u!114 &1572384447
 MonoBehaviour:
@@ -4457,7 +4456,7 @@ Transform:
   m_GameObject: {fileID: 1897559859}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 36.6, y: -2, z: 0}
+  m_LocalPosition: {x: 50.1, y: -2, z: 0}
   m_LocalScale: {x: 20, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -5,15 +5,16 @@ using Masks;
 namespace Combat
 {
     /// <summary>
-    /// Handles player combat: melee combo system and 8-way ranged attacks.
-    /// Decoupled from PlayerMovement using events and interfaces.
+    /// Handles player combat: "Magic Sword" system with 4-way directional attacks.
+    /// Melee swing first - if it hits an enemy, no projectile spawns.
+    /// If melee misses, a sword wave projectile is fired in the aim direction.
     /// </summary>
     public class PlayerCombat : MonoBehaviour, ICombat
     {
         [Header("Combat Data")]
         [SerializeField] private CombatData _combatData;
 
-        [Header("Projectile")]
+        [Header("Projectile (Sword Wave)")]
         [SerializeField] private GameObject _projectilePrefab;
         [SerializeField] private Transform _projectileSpawnPoint;
 
@@ -32,8 +33,7 @@ namespace Combat
 
         // Events
         public event Action<int> OnAttackPerformed;
-        public event Action<Vector2> OnProjectileFired;
-        public event Action OnComboReset;
+        public event Action<Vector2> OnSwordWaveFired;
 
         // Combo State
         private int _currentComboIndex;
@@ -42,8 +42,7 @@ namespace Combat
         private bool _isAttacking;
         private float _attackTimer;
 
-        // Ranged State
-        private float _rangedCooldownTimer;
+        // Aim State (4-way)
         private Vector2 _aimDirection = Vector2.right;
         private Vector2 _lastFacingDirection = Vector2.right;
 
@@ -109,12 +108,6 @@ namespace Combat
             {
                 _attackCooldownTimer -= Time.deltaTime;
             }
-
-            // Ranged cooldown
-            if (_rangedCooldownTimer > 0)
-            {
-                _rangedCooldownTimer -= Time.deltaTime;
-            }
         }
 
         private void UpdateFacingDirection()
@@ -132,9 +125,15 @@ namespace Combat
             }
         }
 
-        #region Melee Combat
+        #region Magic Sword Attack System
 
-        public void MeleeAttack()
+        /// <summary>
+        /// Performs the unified "Magic Sword" attack.
+        /// 1. Executes melee hitbox check
+        /// 2. If melee hits at least one IDamageable, apply damage and knockback (no projectile)
+        /// 3. If melee misses, spawn a sword wave projectile in the 4-way aim direction
+        /// </summary>
+        public void PerformAttack()
         {
             if (_attackCooldownTimer > 0 || _isAttacking) return;
 
@@ -145,13 +144,23 @@ namespace Combat
             // Get effective damage (base damage * mask multiplier)
             float effectiveDamage = GetCurrentComboDamage() * GetDamageMultiplier();
 
-            Debug.Log($"[Combat] Melee Attack! Combo Hit: {_currentComboIndex + 1}/{GetMaxComboHits()}, Base Damage: {GetCurrentComboDamage()}, Effective Damage: {effectiveDamage}");
+            Debug.Log($"[Magic Sword] Attack! Combo Hit: {_currentComboIndex + 1}/{GetMaxComboHits()}, Damage: {effectiveDamage}, Aim: {_aimDirection}");
 
-            // Perform hitbox check with effective damage
-            PerformMeleeHitboxCheck(effectiveDamage);
+            // Perform melee hitbox check and get hit count
+            int hitCount = PerformMeleeHitboxCheck(effectiveDamage);
 
-            // Fire event
+            // Fire attack event (triggers slash VFX)
             OnAttackPerformed?.Invoke(_currentComboIndex);
+
+            // Conditional Sword Wave: Only spawn projectile if melee missed
+            if (hitCount == 0)
+            {
+                SpawnSwordWave();
+            }
+            else
+            {
+                Debug.Log($"[Magic Sword] Melee hit {hitCount} target(s) - No sword wave spawned");
+            }
 
             // Advance combo
             _currentComboIndex++;
@@ -169,13 +178,18 @@ namespace Combat
             }
         }
 
-        private void PerformMeleeHitboxCheck(float damage)
+        /// <summary>
+        /// Performs melee hitbox check and returns the number of enemies hit.
+        /// </summary>
+        private int PerformMeleeHitboxCheck(float damage)
         {
             Vector2 hitboxCenter = GetHitboxCenter();
             Vector2 hitboxSize = GetHitboxSize();
 
             // Find all colliders in hitbox
             Collider2D[] hits = Physics2D.OverlapBoxAll(hitboxCenter, hitboxSize, 0f, _enemyLayer);
+
+            int hitCount = 0;
 
             foreach (Collider2D hit in hits)
             {
@@ -184,17 +198,60 @@ namespace Combat
                 {
                     // Calculate knockback direction (away from player)
                     Vector2 knockbackDir = ((Vector2)hit.transform.position - (Vector2)transform.position).normalized;
-                    
-                    // Debug log when hitting IDamageable
-                    Debug.Log($"[Combat] HIT! Target: {hit.gameObject.name}, Damage: {damage}, Knockback: {knockbackDir}");
-                    
-                    // Apply damage (using effective damage with mask multiplier)
+
+                    Debug.Log($"[Magic Sword] MELEE HIT! Target: {hit.gameObject.name}, Damage: {damage}");
+
+                    // Apply damage
                     damageable.TakeDamage(damage, knockbackDir, GetMeleeKnockbackForce());
 
                     // Apply recoil to player
                     ApplyRecoil(-knockbackDir);
+
+                    hitCount++;
                 }
             }
+
+            return hitCount;
+        }
+
+        /// <summary>
+        /// Spawns a sword wave projectile in the current 4-way aim direction.
+        /// </summary>
+        private void SpawnSwordWave()
+        {
+            if (_projectilePrefab == null)
+            {
+                Debug.LogWarning("Projectile prefab not assigned - cannot spawn sword wave.");
+                return;
+            }
+
+            // Use 4-way snapped aim direction
+            Vector2 fireDirection = _aimDirection;
+
+            // Spawn projectile
+            Vector3 spawnPos = _projectileSpawnPoint != null ? _projectileSpawnPoint.position : transform.position;
+            GameObject projectileObj = Instantiate(_projectilePrefab, spawnPos, Quaternion.identity);
+
+            Projectile projectile = projectileObj.GetComponent<Projectile>();
+            if (projectile != null)
+            {
+                // Apply damage multiplier to projectile damage
+                float effectiveProjectileDamage = GetProjectileDamage() * GetDamageMultiplier();
+
+                projectile.Initialize(
+                    fireDirection,
+                    GetProjectileSpeed(),
+                    effectiveProjectileDamage,
+                    GetRangedKnockbackForce(),
+                    GetProjectileLifetime(),
+                    _enemyLayer
+                );
+
+                Debug.Log($"[Magic Sword] Sword Wave fired! Direction: {fireDirection}, Damage: {effectiveProjectileDamage}");
+            }
+
+            // Fire event
+            OnSwordWaveFired?.Invoke(fireDirection);
         }
 
         private void SpawnSlashEffect(int comboIndex)
@@ -202,16 +259,18 @@ namespace Combat
             if (_slashEffectPrefab == null) return;
 
             Vector2 hitboxCenter = GetHitboxCenter();
-            float facingAngle = transform.localScale.x >= 0 ? 0f : 180f;
+            
+            // Calculate rotation based on 4-way aim direction
+            float aimAngle = Mathf.Atan2(_aimDirection.y, _aimDirection.x) * Mathf.Rad2Deg;
             
             // Vary the angle slightly based on combo index for visual variety
             float angleOffset = (comboIndex - 1) * 15f;
-            Quaternion rotation = Quaternion.Euler(0, 0, facingAngle + angleOffset);
+            Quaternion rotation = Quaternion.Euler(0, 0, aimAngle + angleOffset);
 
             GameObject slashObj = Instantiate(_slashEffectPrefab, hitboxCenter, rotation);
-            
-            // Flip the slash effect if facing left
-            if (transform.localScale.x < 0)
+
+            // Flip the slash effect if aiming left
+            if (_aimDirection.x < 0)
             {
                 Vector3 scale = slashObj.transform.localScale;
                 scale.x *= -1;
@@ -236,18 +295,97 @@ namespace Combat
         {
             _currentComboIndex = 0;
             _comboTimer = 0;
-            OnComboReset?.Invoke();
+        }
+
+        #endregion
+
+        #region 4-Way Aim Direction
+
+        /// <summary>
+        /// Sets the aim direction, snapping to 4 cardinal directions (Up, Down, Left, Right).
+        /// </summary>
+        public void SetAimDirection(Vector2 direction)
+        {
+            if (direction.sqrMagnitude > 0.1f)
+            {
+                // Snap to 4 directions
+                _aimDirection = SnapTo4Directions(direction);
+            }
+            else
+            {
+                // Default to facing direction (left or right based on character facing)
+                _aimDirection = _lastFacingDirection;
+            }
         }
 
         /// <summary>
+        /// Snaps a direction vector to one of 4 cardinal directions (Up, Down, Left, Right).
+        /// </summary>
+        private Vector2 SnapTo4Directions(Vector2 direction)
+        {
+            if (direction.sqrMagnitude < 0.1f) return _lastFacingDirection;
+
+            // Determine if horizontal or vertical is dominant
+            float absX = Mathf.Abs(direction.x);
+            float absY = Mathf.Abs(direction.y);
+
+            if (absX >= absY)
+            {
+                // Horizontal dominant - snap to Left or Right
+                return direction.x >= 0 ? Vector2.right : Vector2.left;
+            }
+            else
+            {
+                // Vertical dominant - snap to Up or Down
+                return direction.y >= 0 ? Vector2.up : Vector2.down;
+            }
+        }
+
+        #endregion
+
+        #region Hitbox Helpers
+
+        /// <summary>
         /// Gets the center position of the melee hitbox in world space.
+        /// Now considers 4-way aim direction for hitbox positioning.
         /// </summary>
         public Vector2 GetHitboxCenter()
         {
             Vector2 offset = GetHitboxOffset();
-            // Flip offset based on facing direction
-            offset.x *= Mathf.Sign(transform.localScale.x);
+            
+            // Position hitbox based on aim direction
+            if (_aimDirection == Vector2.up)
+            {
+                // Swap X and Y for vertical attacks
+                offset = new Vector2(0, Mathf.Abs(offset.x));
+            }
+            else if (_aimDirection == Vector2.down)
+            {
+                offset = new Vector2(0, -Mathf.Abs(offset.x));
+            }
+            else
+            {
+                // Horizontal - flip based on direction
+                offset.x *= Mathf.Sign(_aimDirection.x);
+            }
+
             return (Vector2)transform.position + offset;
+        }
+
+        /// <summary>
+        /// Gets the hitbox size, rotated for vertical attacks.
+        /// </summary>
+        public Vector2 GetHitboxSizeForDirection()
+        {
+            Vector2 size = GetHitboxSize();
+            
+            // Swap width and height for vertical attacks
+            if (_aimDirection == Vector2.up || _aimDirection == Vector2.down)
+            {
+                return new Vector2(size.y, size.x);
+            }
+            
+            return size;
         }
 
         /// <summary>
@@ -255,78 +393,10 @@ namespace Combat
         /// </summary>
         public bool IsAttacking => _isAttacking;
 
-        #endregion
-
-        #region Ranged Combat
-
-        public void SetAimDirection(Vector2 direction)
-        {
-            if (direction.sqrMagnitude > 0.1f)
-            {
-                // Snap to 8 directions (Cuphead style)
-                _aimDirection = SnapTo8Directions(direction);
-            }
-            else
-            {
-                // Default to facing direction
-                _aimDirection = _lastFacingDirection;
-            }
-        }
-
-        public void RangedAttack(Vector2 direction)
-        {
-            if (_rangedCooldownTimer > 0) return;
-            if (_projectilePrefab == null)
-            {
-                Debug.LogWarning("Projectile prefab not assigned to PlayerCombat.");
-                return;
-            }
-
-            // Use aim direction if no direction provided
-            Vector2 fireDirection = direction.sqrMagnitude > 0.1f ? SnapTo8Directions(direction) : _aimDirection;
-
-            // Spawn projectile
-            Vector3 spawnPos = _projectileSpawnPoint != null ? _projectileSpawnPoint.position : transform.position;
-            GameObject projectileObj = Instantiate(_projectilePrefab, spawnPos, Quaternion.identity);
-
-            Projectile projectile = projectileObj.GetComponent<Projectile>();
-            if (projectile != null)
-            {
-                // Apply damage multiplier to projectile damage
-                float effectiveProjectileDamage = GetProjectileDamage() * GetDamageMultiplier();
-                
-                projectile.Initialize(
-                    fireDirection,
-                    GetProjectileSpeed(),
-                    effectiveProjectileDamage,
-                    GetRangedKnockbackForce(),
-                    GetProjectileLifetime(),
-                    _enemyLayer
-                );
-            }
-
-            // Start cooldown
-            _rangedCooldownTimer = GetRangedCooldown();
-
-            // Fire event
-            OnProjectileFired?.Invoke(fireDirection);
-        }
-
         /// <summary>
-        /// Snaps a direction vector to one of 8 cardinal/diagonal directions.
+        /// Returns the current 4-way aim direction.
         /// </summary>
-        private Vector2 SnapTo8Directions(Vector2 direction)
-        {
-            if (direction.sqrMagnitude < 0.1f) return _lastFacingDirection;
-
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            
-            // Snap to nearest 45 degree increment
-            float snappedAngle = Mathf.Round(angle / 45f) * 45f;
-            float radians = snappedAngle * Mathf.Deg2Rad;
-
-            return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians)).normalized;
-        }
+        public Vector2 AimDirection => _aimDirection;
 
         #endregion
 
@@ -378,7 +448,6 @@ namespace Combat
         private float GetProjectileDamage() => _combatData != null ? _combatData.projectileDamage : 8f;
         private float GetProjectileSpeed() => _combatData != null ? _combatData.projectileSpeed : 15f;
         private float GetProjectileLifetime() => _combatData != null ? _combatData.projectileLifetime : 3f;
-        private float GetRangedCooldown() => _combatData != null ? _combatData.rangedCooldown : 0.2f;
         private float GetRangedKnockbackForce() => _combatData != null ? _combatData.rangedKnockbackForce : 3f;
         private Vector2 GetHitboxSize() => _combatData != null ? _combatData.meleeHitboxSize : new Vector2(1.5f, 1f);
         private Vector2 GetHitboxOffset() => _combatData != null ? _combatData.meleeHitboxOffset : new Vector2(1f, 0f);
@@ -394,8 +463,8 @@ namespace Combat
             // Draw melee hitbox - RED when attacking, YELLOW when idle
             Gizmos.color = _isAttacking ? Color.red : new Color(1f, 1f, 0f, 0.3f);
             Vector2 center = GetHitboxCenter();
-            Vector2 size = GetHitboxSize();
-            
+            Vector2 size = GetHitboxSizeForDirection();
+
             if (_isAttacking)
             {
                 // Solid cube when attacking for better visibility
@@ -407,10 +476,14 @@ namespace Combat
                 Gizmos.DrawWireCube(center, size);
             }
 
-            // Draw aim direction
+            // Draw aim direction (4-way)
             Gizmos.color = Color.cyan;
             Vector3 aimStart = _projectileSpawnPoint != null ? _projectileSpawnPoint.position : transform.position;
             Gizmos.DrawRay(aimStart, _aimDirection * 2f);
+
+            // Draw direction indicator
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(aimStart + (Vector3)_aimDirection * 2f, 0.15f);
         }
 
         private void OnDrawGizmosSelected()
@@ -420,12 +493,20 @@ namespace Combat
             // Draw more detailed hitbox when selected
             Gizmos.color = _isAttacking ? Color.red : Color.yellow;
             Vector2 center = GetHitboxCenter();
-            Vector2 size = GetHitboxSize();
+            Vector2 size = GetHitboxSizeForDirection();
             Gizmos.DrawWireCube(center, size);
 
             // Draw hitbox offset line
             Gizmos.color = Color.green;
             Gizmos.DrawLine(transform.position, center);
+
+            // Draw all 4 possible aim directions
+            Gizmos.color = new Color(0f, 1f, 1f, 0.3f);
+            Vector3 pos = transform.position;
+            Gizmos.DrawRay(pos, Vector2.up * 1.5f);
+            Gizmos.DrawRay(pos, Vector2.down * 1.5f);
+            Gizmos.DrawRay(pos, Vector2.left * 1.5f);
+            Gizmos.DrawRay(pos, Vector2.right * 1.5f);
         }
 
         #endregion
