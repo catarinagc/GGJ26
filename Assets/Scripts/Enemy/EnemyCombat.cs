@@ -7,6 +7,7 @@ namespace Enemy
     /// <summary>
     /// Handles enemy combat: "Magic Sword" system with 4-way directional attacks.
     /// Mirrors the player's combat system - melee swing first, sword wave if melee misses.
+    /// Supports both melee-first attacks and forced wave attacks for ranged combat.
     /// </summary>
     public class EnemyCombat : MonoBehaviour
     {
@@ -36,6 +37,10 @@ namespace Enemy
         [SerializeField] private Vector2 _meleeHitboxOffset = new Vector2(1f, 0f);
         [SerializeField] private LayerMask _playerLayer;
 
+        [Header("Collision Settings")]
+        [Tooltip("Layers that enemy projectiles should ignore (typically Enemy layer)")]
+        [SerializeField] private LayerMask _projectileIgnoreLayers;
+
         [Header("Weapon Visual")]
         [SerializeField] private GameObject _weaponVisual;
         [SerializeField] private float _weaponSwingAngle = 45f;
@@ -59,9 +64,12 @@ namespace Enemy
 
         // Cached Components
         private Transform _playerTransform;
+        private Collider2D _ownCollider;
 
         private void Awake()
         {
+            _ownCollider = GetComponent<Collider2D>();
+
             // Auto-create projectile spawn point if not assigned
             if (_projectileSpawnPoint == null)
             {
@@ -69,6 +77,16 @@ namespace Enemy
                 spawnPoint.transform.SetParent(transform);
                 spawnPoint.transform.localPosition = new Vector3(0.5f, 0f, 0f);
                 _projectileSpawnPoint = spawnPoint.transform;
+            }
+
+            // Auto-set projectile ignore layers to Enemy layer if not set
+            if (_projectileIgnoreLayers == 0)
+            {
+                int enemyLayer = LayerMask.NameToLayer("Enemy");
+                if (enemyLayer >= 0)
+                {
+                    _projectileIgnoreLayers = 1 << enemyLayer;
+                }
             }
         }
 
@@ -175,6 +193,34 @@ namespace Enemy
         }
 
         /// <summary>
+        /// Performs a forced wave attack - always fires a projectile regardless of melee hit.
+        /// Used when the enemy is at medium range and wants to fire a ranged attack.
+        /// </summary>
+        public void PerformWaveAttack()
+        {
+            if (_attackCooldownTimer > 0 || _isAttacking) return;
+
+            // Start attack
+            _isAttacking = true;
+            _attackTimer = _attackDuration;
+            _attackCooldownTimer = _attackCooldown;
+
+            Debug.Log($"[Enemy Magic Sword] {gameObject.name} WAVE Attack! Aim: {_aimDirection}, Damage: {_projectileDamage}");
+
+            // Fire attack started event
+            OnAttackStarted?.Invoke();
+
+            // Animate weapon swing
+            AnimateWeaponSwing();
+
+            // Spawn slash VFX
+            SpawnSlashEffect();
+
+            // Always spawn sword wave for wave attacks
+            SpawnSwordWave();
+        }
+
+        /// <summary>
         /// Checks if the enemy can attack (not on cooldown and not currently attacking).
         /// </summary>
         public bool CanAttack()
@@ -247,6 +293,16 @@ namespace Enemy
                 waveVisual.SetColors(_swordWaveColor, new Color(_swordWaveColor.r, _swordWaveColor.g, _swordWaveColor.b, 0f));
             }
 
+            // Setup collision ignoring - prevent projectile from hitting the enemy that fired it
+            Collider2D projectileCollider = projectileObj.GetComponent<Collider2D>();
+            if (projectileCollider != null && _ownCollider != null)
+            {
+                Physics2D.IgnoreCollision(projectileCollider, _ownCollider);
+            }
+
+            // Also ignore all other enemies
+            IgnoreEnemyCollisions(projectileCollider);
+
             Projectile projectile = projectileObj.GetComponent<Projectile>();
             if (projectile != null)
             {
@@ -264,6 +320,25 @@ namespace Enemy
 
             // Fire event
             OnSwordWaveFired?.Invoke(fireDirection);
+        }
+
+        /// <summary>
+        /// Makes the projectile ignore collisions with all enemies in the scene.
+        /// </summary>
+        private void IgnoreEnemyCollisions(Collider2D projectileCollider)
+        {
+            if (projectileCollider == null) return;
+
+            // Find all enemies and ignore their colliders
+            EnemyBase[] allEnemies = FindObjectsByType<EnemyBase>(FindObjectsSortMode.None);
+            foreach (EnemyBase enemy in allEnemies)
+            {
+                Collider2D enemyCollider = enemy.GetComponent<Collider2D>();
+                if (enemyCollider != null)
+                {
+                    Physics2D.IgnoreCollision(projectileCollider, enemyCollider);
+                }
+            }
         }
 
         private void SpawnSlashEffect()
@@ -314,7 +389,6 @@ namespace Enemy
             if (_weaponVisual == null) return;
 
             // Simple weapon swing animation using rotation
-            // In a full implementation, this would use an animation or tween
             float baseAngle = Mathf.Atan2(_aimDirection.y, _aimDirection.x) * Mathf.Rad2Deg;
             _weaponVisual.transform.localRotation = Quaternion.Euler(0, 0, baseAngle + _weaponSwingAngle);
         }
