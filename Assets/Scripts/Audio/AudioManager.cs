@@ -3,35 +3,65 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
 [SerializeField] AudioSource musicSource;
+    public AudioClip backgroundMusic;
 [SerializeField] AudioSource sfxSource;
 
+    [Header("Main Character Audio Clips")]
+    public AudioClip footstep;
+    public AudioClip attack;
+    public AudioClip jump;
+    public AudioClip death;
+    public AudioClip hit;
 
-public AudioClip backgroundMusic;
-    // public AudioClip death;
-    // public AudioClip attackSword;
-    // public AudioClip attackBullet;
-    // public AudioClip pickupItem;
-    // public AudioClip jump;
-    // public AudioClip enemysfx;
-    // public AudioClip enemyDeath;
+
+    [Header("Enemy Audio Clips")]
+    public AudioClip enemySpeak;
+    public AudioClip enemyAttack;
+    public AudioClip enemySteps;
+    public AudioClip enemyDeath;
+    public AudioClip enemyHit;
+    [Header("Collectible Audio Clips")]
+    public AudioClip pickupHealth;
+    public AudioClip pickupDamage;
+    [Header("Boss Audio Clips")]
+    public AudioClip bossMusic;
+    public AudioClip bossSpeak;
+    public AudioClip bossDeath;
+    public AudioClip bossHit;
+    public AudioClip bossAttack;
 
     private void Start()
     {
         if (musicSource == null)
         {
-            Debug.LogError("MusicSource não está atribuído no AudioManager!");
+            Debug.LogError("MusicSource is not assigned in AudioManager!");
             return;
         }
         
         if (backgroundMusic == null)
         {
-            Debug.LogError("BackgroundMusic clip não está atribuído no AudioManager!");
+            Debug.LogError("BackgroundMusic clip is not assigned in AudioManager!");
             return;
         }
         musicSource.clip = backgroundMusic;
         musicSource.Play();
-        musicSource.volume = 0.02f;
+    }
+
+    public void PlaySFX(AudioClip clip)
+    {
+        if (sfxSource == null)
+        {
+            Debug.LogError("SFXSource is not assigned in AudioManager!");
+            return;
+        }
+        
+        if (clip == null)
+        {
+            Debug.LogError("The provided AudioClip is null!");
+            return;
+        }
+        
+        sfxSource.PlayOneShot(clip);
     }
 }
