@@ -105,5 +105,26 @@ namespace Combat
                 _trailRenderer.endColor = _fadeColor;
             }
         }
+
+        /// <summary>
+        /// Set the wave and fade colors directly.
+        /// </summary>
+        public void SetColors(Color waveColor, Color fadeColor)
+        {
+            _waveColor = waveColor;
+            _fadeColor = fadeColor;
+            _baseAlpha = waveColor.a;
+
+            if (_spriteRenderer != null)
+            {
+                _spriteRenderer.color = _waveColor;
+            }
+
+            if (_trailRenderer != null)
+            {
+                _trailRenderer.startColor = _waveColor;
+                _trailRenderer.endColor = _fadeColor;
+            }
+        }
     }
 }
