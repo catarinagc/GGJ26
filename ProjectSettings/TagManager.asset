@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Player
+  - Collectable
   layers:
   - Default
   - TransparentFX
@@ -15,7 +16,6 @@ TagManager:
   - Ground
   - Enemy
   - Player
-  - 
   - 
   - 
   - 

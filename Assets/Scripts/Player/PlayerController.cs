@@ -12,12 +12,12 @@ namespace Player
         [SerializeField] private string _moveActionName = "Move";
         [SerializeField] private string _jumpActionName = "Jump";
         [SerializeField] private string _dashActionName = "Dash";
-        [SerializeField] private string _maskAbilityActionName = "MaskAbility";
+        //[SerializeField] private string _maskAbilityActionName = "MaskAbility";
 
         private InputAction _moveAction;
         private InputAction _jumpAction;
         private InputAction _dashAction;
-        private InputAction _maskAbilityAction;
+        //private InputAction _maskAbilityAction;
 
         [Header("Jump Settings")]
         [SerializeField] private float _coyoteTime = 0.1f;
@@ -26,8 +26,14 @@ namespace Player
         [Header("Dash Settings")]
         [SerializeField] private float _dashCooldown = 1.2f;
 
-        [Header("Mask System")]
-        [SerializeField] private MaskManager _maskManager;
+        //[Header("Mask System")]
+        //[SerializeField] private MaskManager _maskManager;
+
+        [Header("Player Attributes")]
+        private int startHealth;
+        private int currentHealth;
+        private int totalHealth;
+        private double currentDamageMult;
 
         private IMovement _movement;
         private float _coyoteTimeCounter;
@@ -44,14 +50,14 @@ namespace Player
             }
 
             // Auto-find MaskManager if not assigned
-            if (_maskManager == null)
-            {
-                _maskManager = GetComponent<MaskManager>();
-                if (_maskManager == null)
-                {
-                    _maskManager = FindAnyObjectByType<MaskManager>();
-                }
-            }
+            //if (_maskManager == null)
+            //{
+            //    _maskManager = GetComponent<MaskManager>();
+            //    if (_maskManager == null)
+            //    {
+            //        _maskManager = FindAnyObjectByType<MaskManager>();
+            //    }
+            //}
 
             if (_inputActionAsset != null)
             {
@@ -61,7 +67,7 @@ namespace Player
                     _moveAction = map.FindAction(_moveActionName);
                     _jumpAction = map.FindAction(_jumpActionName);
                     _dashAction = map.FindAction(_dashActionName);
-                    _maskAbilityAction = map.FindAction(_maskAbilityActionName);
+                    //_maskAbilityAction = map.FindAction(_maskAbilityActionName);
                 }
                 else
                 {
@@ -72,6 +78,9 @@ namespace Player
             {
                 Debug.LogError("Input Action Asset not assigned to PlayerController!");
             }
+
+            totalHealth = startHealth;
+            currentHealth = totalHealth;
         }
 
         private void OnEnable()
@@ -91,11 +100,11 @@ namespace Player
             {
                 _moveAction.Enable();
             }
-            if (_maskAbilityAction != null)
-            {
-                _maskAbilityAction.Enable();
-                _maskAbilityAction.performed += OnMaskAbilityPerformed;
-            }
+            //if (_maskAbilityAction != null)
+            //{
+            //    _maskAbilityAction.Enable();
+            //    _maskAbilityAction.performed += OnMaskAbilityPerformed;
+            //}
         }
 
         private void OnDisable()
@@ -115,11 +124,11 @@ namespace Player
             {
                 _moveAction.Disable();
             }
-            if (_maskAbilityAction != null)
-            {
-                _maskAbilityAction.performed -= OnMaskAbilityPerformed;
-                _maskAbilityAction.Disable();
-            }
+            //if (_maskAbilityAction != null)
+            //{
+            //    _maskAbilityAction.performed -= OnMaskAbilityPerformed;
+            //    _maskAbilityAction.Disable();
+            //}
         }
 
         private void Update()
@@ -197,24 +206,37 @@ namespace Player
             }
         }
 
-        private void OnMaskAbilityPerformed(InputAction.CallbackContext context)
-        {
-            if (_maskManager != null)
-            {
-                _maskManager.TriggerMaskAbility();
-            }
-            else
-            {
-                Debug.LogWarning("[PlayerController] MaskManager not found. Cannot trigger mask ability.");
-            }
-        }
+        //private void OnMaskAbilityPerformed(InputAction.CallbackContext context)
+        //{
+        //    if (_maskManager != null)
+        //    {
+        //        _maskManager.TriggerMaskAbility();
+        //    }
+        //    else
+        //    {
+        //        Debug.LogWarning("[PlayerController] MaskManager not found. Cannot trigger mask ability.");
+        //    }
+        //}
 
         /// <summary>
         /// Sets the MaskManager reference (for dependency injection or runtime assignment).
         /// </summary>
-        public void SetMaskManager(MaskManager maskManager)
+        //public void SetMaskManager(MaskManager maskManager)
+        //{
+        //    _maskManager = maskManager;
+        //}
+
+        public void changeHealthTotal(int amount)
         {
-            _maskManager = maskManager;
+            totalHealth += amount;
+            Debug.Log(totalHealth);
+            currentHealth += amount;
+        }
+
+        public void changeDamageMult(double extraMult)
+        {
+            currentDamageMult += extraMult;
+            Debug.Log(currentDamageMult);
         }
     }
 }
