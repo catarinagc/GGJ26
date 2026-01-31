@@ -296,6 +296,8 @@ GameObject:
   - component: {fileID: 454402922}
   - component: {fileID: 454402921}
   - component: {fileID: 454402924}
+  - component: {fileID: 454402926}
+  - component: {fileID: 454402925}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -421,6 +423,46 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &454402925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 454402920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e09bbd7a5852c674991b12abdd0e1f36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _defaultDuration: 0.02
+  _defaultMagnitude: 0.02
+  _dampingSpeed: 0.2
+  _useUnscaledTime: 1
+--- !u!114 &454402926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 454402920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbd13b3063c64b14d923e4751a759e51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {fileID: 0}
+  _findPlayerOnStart: 1
+  _smoothSpeed: 0.125
+  _offset: {x: 0, y: 0, z: -10}
+  _useBounds: 0
+  _minX: -10
+  _maxX: 10
+  _minY: -5
+  _maxY: 5
+  _useLookAhead: 1
+  _lookAheadDistance: 1.5
+  _lookAheadSpeed: 2
 --- !u!1 &1085532852
 GameObject:
   m_ObjectHideFlags: 0
@@ -435,6 +477,7 @@ GameObject:
   - component: {fileID: 1085532855}
   - component: {fileID: 1085532854}
   - component: {fileID: 1085532853}
+  - component: {fileID: 1085532859}
   m_Layer: 7
   m_Name: TrainingDummy
   m_TagString: Untagged
@@ -480,6 +523,10 @@ MonoBehaviour:
   _knockbackResistance: 0
   _invincibilityDuration: 0
   _isInvincible: 0
+  _useHitFlash: 1
+  _triggerCameraShake: 1
+  _cameraShakeDuration: 0.05
+  _cameraShakeMagnitude: 0.1
   _logDamage: 1
 --- !u!61 &1085532855
 BoxCollider2D:
@@ -624,6 +671,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1085532859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1085532852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24cc1beade09ae8449185976fb95be9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _flashDuration: 0.1
+  _flashColor: {r: 1, g: 1, b: 1, a: 1}
+  _flashMaterial: {fileID: 0}
 --- !u!1 &1087634561
 GameObject:
   m_ObjectHideFlags: 0

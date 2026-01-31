@@ -1,5 +1,7 @@
 using System;
 using UnityEngine;
+using Effects;
+using CameraSystem;
 
 namespace Combat
 {
@@ -21,6 +23,12 @@ namespace Combat
         [SerializeField] private float _invincibilityDuration = 0f;
         [SerializeField] private bool _isInvincible;
 
+        [Header("Hit Effects")]
+        [SerializeField] private bool _useHitFlash = true;
+        [SerializeField] private bool _triggerCameraShake = true;
+        [SerializeField] private float _cameraShakeDuration = 0.05f;
+        [SerializeField] private float _cameraShakeMagnitude = 0.1f;
+
         [Header("Debug")]
         [SerializeField] private bool _logDamage = true;
 
@@ -37,11 +45,13 @@ namespace Combat
         public float HealthPercentage => _maxHealth > 0 ? _currentHealth / _maxHealth : 0f;
 
         private Rigidbody2D _rb;
+        private HitEffect _hitEffect;
         private float _invincibilityTimer;
 
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
+            _hitEffect = GetComponent<HitEffect>();
             _currentHealth = _maxHealth;
         }
 
@@ -73,6 +83,18 @@ namespace Combat
             if (_logDamage)
             {
                 Debug.Log($"[Health] {gameObject.name} took {damage} damage. Health: {previousHealth} -> {_currentHealth}/{_maxHealth}");
+            }
+
+            // Trigger hit flash effect
+            if (_useHitFlash && _hitEffect != null)
+            {
+                _hitEffect.Flash();
+            }
+
+            // Trigger camera shake
+            if (_triggerCameraShake)
+            {
+                CameraShake.TriggerShake(_cameraShakeDuration, _cameraShakeMagnitude);
             }
 
             // Fire events
