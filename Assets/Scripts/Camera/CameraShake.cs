@@ -6,7 +6,10 @@ namespace CameraSystem
     /// <summary>
     /// Camera shake effect for impact feedback.
     /// Can be triggered on hits, explosions, or other impactful events.
+    /// Uses an offset-based approach to work seamlessly with CameraFollow.
+    /// Runs after CameraFollow to apply shake offset on top of follow position.
     /// </summary>
+    [DefaultExecutionOrder(-50)] // Run after CameraFollow (-100)
     public class CameraShake : MonoBehaviour
     {
         [Header("Default Settings")]
@@ -17,10 +20,13 @@ namespace CameraSystem
         [SerializeField] private float _dampingSpeed = 1.0f;
         [SerializeField] private bool _useUnscaledTime = false;
 
-        private Vector3 _originalLocalPosition;
         private Coroutine _shakeCoroutine;
         private float _currentShakeMagnitude;
         private float _currentShakeDuration;
+        
+        // Shake offset that can be read by CameraFollow
+        private Vector3 _shakeOffset;
+        public Vector3 ShakeOffset => _shakeOffset;
 
         // Singleton for easy access
         public static CameraShake Instance { get; private set; }
@@ -36,7 +42,7 @@ namespace CameraSystem
                 // Allow multiple instances, just don't set as singleton
             }
 
-            _originalLocalPosition = transform.localPosition;
+            _shakeOffset = Vector3.zero;
         }
 
         private void OnDestroy()
@@ -91,8 +97,8 @@ namespace CameraSystem
                 float x = Random.Range(-1f, 1f) * _currentShakeMagnitude;
                 float y = Random.Range(-1f, 1f) * _currentShakeMagnitude;
 
-                // Apply shake offset to local position
-                transform.localPosition = _originalLocalPosition + new Vector3(x, y, 0f);
+                // Store shake offset (will be applied by CameraFollow or in LateUpdate)
+                _shakeOffset = new Vector3(x, y, 0f);
 
                 // Reduce magnitude over time for smooth falloff
                 _currentShakeMagnitude = Mathf.Lerp(magnitude, 0f, elapsed / duration);
@@ -109,10 +115,20 @@ namespace CameraSystem
                 }
             }
 
-            // Reset to original position
-            transform.localPosition = _originalLocalPosition;
+            // Reset shake offset
+            _shakeOffset = Vector3.zero;
             _shakeCoroutine = null;
             _currentShakeMagnitude = 0f;
+        }
+
+        private void LateUpdate()
+        {
+            // Apply shake offset directly to position
+            // This runs after CameraFollow has set the base position
+            if (_shakeOffset != Vector3.zero)
+            {
+                transform.position += _shakeOffset;
+            }
         }
 
         /// <summary>
@@ -125,16 +141,8 @@ namespace CameraSystem
                 StopCoroutine(_shakeCoroutine);
                 _shakeCoroutine = null;
             }
-            transform.localPosition = _originalLocalPosition;
+            _shakeOffset = Vector3.zero;
             _currentShakeMagnitude = 0f;
-        }
-
-        /// <summary>
-        /// Update the original position (call this if the camera moves to a new base position).
-        /// </summary>
-        public void UpdateOriginalPosition()
-        {
-            _originalLocalPosition = transform.localPosition;
         }
 
         /// <summary>

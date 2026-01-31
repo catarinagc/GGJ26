@@ -5,7 +5,9 @@ namespace CameraSystem
     /// <summary>
     /// Smooth camera follow script for 2D platformers.
     /// Follows the target with configurable smoothing and offset.
+    /// Runs before CameraShake to allow shake offset to be applied after.
     /// </summary>
+    [DefaultExecutionOrder(-100)] // Run before CameraShake
     public class CameraFollow : MonoBehaviour
     {
         [Header("Target")]
