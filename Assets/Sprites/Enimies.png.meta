@@ -1,0 +1,1547 @@
+fileFormatVersion: 2
+guid: d89e2f849bf1ee145a248a64cc1627f4
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3569445469700530256
+    second: Enimies_0
+  - first:
+      213: 399810896650834675
+    second: Enimies_1
+  - first:
+      213: -8143305148902634836
+    second: Enimies_2
+  - first:
+      213: -6112266007954398242
+    second: Enimies_3
+  - first:
+      213: -1375907252324586829
+    second: Enimies_4
+  - first:
+      213: 1868674708393504844
+    second: Enimies_5
+  - first:
+      213: -8862131497117114820
+    second: Enimies_6
+  - first:
+      213: 4962095982774008800
+    second: Enimies_7
+  - first:
+      213: -8998821694051446708
+    second: Enimies_8
+  - first:
+      213: -1039989086450699280
+    second: Enimies_9
+  - first:
+      213: -4110247401860581306
+    second: Enimies_10
+  - first:
+      213: -5985843575663622551
+    second: Enimies_11
+  - first:
+      213: 107279563855447780
+    second: Enimies_12
+  - first:
+      213: 1866419949843592218
+    second: Enimies_13
+  - first:
+      213: 3743371236709910156
+    second: Enimies_14
+  - first:
+      213: -6753875703504728352
+    second: Enimies_15
+  - first:
+      213: 697187727980358291
+    second: Enimies_16
+  - first:
+      213: 5472158489017176915
+    second: Enimies_17
+  - first:
+      213: 7325713590423893633
+    second: Enimies_18
+  - first:
+      213: -4519668103701062537
+    second: Enimies_19
+  - first:
+      213: -6889749040305755816
+    second: Enimies_20
+  - first:
+      213: 3526151721125258490
+    second: Enimies_21
+  - first:
+      213: -7028627700377361710
+    second: Enimies_22
+  - first:
+      213: -7299740560776269529
+    second: Enimies_23
+  - first:
+      213: -7158131371410033662
+    second: Enimies_24
+  - first:
+      213: -5060611930627968998
+    second: Enimies_25
+  - first:
+      213: 5209127923696706843
+    second: Enimies_26
+  - first:
+      213: 267327566444115783
+    second: Enimies_27
+  - first:
+      213: 2569297440739282543
+    second: Enimies_28
+  - first:
+      213: 3834449466238499934
+    second: Enimies_29
+  - first:
+      213: 3872002155788439893
+    second: Enimies_30
+  - first:
+      213: 4288701068228595441
+    second: Enimies_31
+  - first:
+      213: -1153710245880584994
+    second: Enimies_32
+  - first:
+      213: 1584702616582879454
+    second: Enimies_33
+  - first:
+      213: 511026070805494406
+    second: Enimies_34
+  - first:
+      213: 1740322946404162089
+    second: Enimies_35
+  - first:
+      213: -7126112924003060643
+    second: Enimies_36
+  - first:
+      213: -4388762351097739245
+    second: Enimies_37
+  - first:
+      213: 5222898931892275835
+    second: Enimies_38
+  - first:
+      213: 216763732967010698
+    second: Enimies_39
+  - first:
+      213: 2749042701031634351
+    second: Enimies_40
+  - first:
+      213: -8254639456359117006
+    second: Enimies_41
+  - first:
+      213: 6831705887462393167
+    second: Enimies_42
+  - first:
+      213: 7984323740342438372
+    second: Enimies_43
+  - first:
+      213: -257873199972325116
+    second: Enimies_44
+  - first:
+      213: -7850081775587634406
+    second: Enimies_45
+  - first:
+      213: 1395234319185673500
+    second: Enimies_46
+  - first:
+      213: -8529027706567247968
+    second: Enimies_47
+  - first:
+      213: 6633644233851978195
+    second: Enimies_48
+  - first:
+      213: 5930512666014030230
+    second: Enimies_49
+  - first:
+      213: -1988336058146200077
+    second: Enimies_50
+  - first:
+      213: 1950707941585058844
+    second: Enimies_51
+  - first:
+      213: 9046965057740273028
+    second: Enimies_52
+  - first:
+      213: 7871403129022402819
+    second: Enimies_53
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 10
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Enimies_0
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 351
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 050a0a23eb7398130800000000000000
+      internalID: 3569445469700530256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_1
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 319
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f2143864e96c8500800000000000000
+      internalID: 399810896650834675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_2
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 351
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: caa8c06bc1b2dfe80800000000000000
+      internalID: -8143305148902634836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_3
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 319
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed3ee2f237edc2ba0800000000000000
+      internalID: -6112266007954398242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_4
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 351
+        width: 21
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ba2f45d4abc7ece0800000000000000
+      internalID: -1375907252324586829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_5
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 319
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c403d822fbddee910800000000000000
+      internalID: 1868674708393504844
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_6
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 351
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3e98816b52630580800000000000000
+      internalID: -8862131497117114820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_7
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 319
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0eb33aa8108ecd440800000000000000
+      internalID: 4962095982774008800
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_8
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 351
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c401cf8d853cd1380800000000000000
+      internalID: -8998821694051446708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_9
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 287
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f3b2db9f673191f0800000000000000
+      internalID: -1039989086450699280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_10
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 287
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 648b029d3c775f6c0800000000000000
+      internalID: -4110247401860581306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_11
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 255
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96604877bf20eeca0800000000000000
+      internalID: -5985843575663622551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_12
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 287
+        width: 21
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e64347e1322d7100800000000000000
+      internalID: 107279563855447780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_13
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 255
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1431204e0bd6e910800000000000000
+      internalID: 1866419949843592218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_14
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 287
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c86428a7e4023f330800000000000000
+      internalID: 3743371236709910156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_15
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 255
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ee857bc4d96542a0800000000000000
+      internalID: -6753875703504728352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_16
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 287
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 39ae7047b88eca900800000000000000
+      internalID: 697187727980358291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_17
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 255
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 353d18c272301fb40800000000000000
+      internalID: 5472158489017176915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_18
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 223
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 186b77b72b92aa560800000000000000
+      internalID: 7325713590423893633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_19
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 191
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77c1c305ec9e641c0800000000000000
+      internalID: -4519668103701062537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_20
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 223
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 859acf450c1b260a0800000000000000
+      internalID: -6889749040305755816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_21
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 191
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af4adc9de486fe030800000000000000
+      internalID: 3526151721125258490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_22
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 223
+        width: 21
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d26984885c457e90800000000000000
+      internalID: -7028627700377361710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_23
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 191
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7217b6ab2ac12ba90800000000000000
+      internalID: -7299740560776269529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_24
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 223
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 204768f617539ac90800000000000000
+      internalID: -7158131371410033662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_25
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 191
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a10f0d8e24815c9b0800000000000000
+      internalID: -5060611930627968998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_26
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 223
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b15a2895f3a8a4840800000000000000
+      internalID: 5209127923696706843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_27
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 159
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 747329c510db5b300800000000000000
+      internalID: 267327566444115783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_28
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 159
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f6ec59dd86af7a320800000000000000
+      internalID: 2569297440739282543
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_29
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 127
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5cf4584973b63530800000000000000
+      internalID: 3834449466238499934
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_30
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 159
+        width: 21
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5511159227d1cb530800000000000000
+      internalID: 3872002155788439893
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_31
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 127
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fe8a9726e6848b30800000000000000
+      internalID: 4288701068228595441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_32
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 159
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed42f8cd4a23dffe0800000000000000
+      internalID: -1153710245880584994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_33
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 127
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed8fd0832aefdf510800000000000000
+      internalID: 1584702616582879454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_34
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 159
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68a335df087871700800000000000000
+      internalID: 511026070805494406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_35
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 127
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92a91e6cf7ed62810800000000000000
+      internalID: 1740322946404162089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_36
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 95
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d543a772d06fa1d90800000000000000
+      internalID: -7126112924003060643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_37
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 63
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3180633f4ebf713c0800000000000000
+      internalID: -4388762351097739245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_38
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 95
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7ac43d08e67b7840800000000000000
+      internalID: 5222898931892275835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_39
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 63
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a81bfa77779120300800000000000000
+      internalID: 216763732967010698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_40
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 95
+        width: 21
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa5fe5385cf862620800000000000000
+      internalID: 2749042701031634351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_41
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 63
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23f8ace3621a17d80800000000000000
+      internalID: -8254639456359117006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_42
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 95
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4504280f481fce50800000000000000
+      internalID: 6831705887462393167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_43
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 63
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e944da93240ece60800000000000000
+      internalID: 7984323740342438372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_44
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 95
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4096e8ed0b9db6cf0800000000000000
+      internalID: -257873199972325116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_45
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 31
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a13d4547738ee0390800000000000000
+      internalID: -7850081775587634406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_46
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 31
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1dfe75983edc5310800000000000000
+      internalID: 1395234319185673500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_47
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 0
+        width: 20
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a738965d7ec2a980800000000000000
+      internalID: -8529027706567247968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_48
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 31
+        width: 21
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d1c01db8407f0c50800000000000000
+      internalID: 6633644233851978195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_49
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 0
+        width: 20
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69998b939d96d4250800000000000000
+      internalID: 5930512666014030230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_50
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 31
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f56818c3e20864e0800000000000000
+      internalID: -1988336058146200077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_51
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 0
+        width: 20
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1cf5be998e421b10800000000000000
+      internalID: 1950707941585058844
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_52
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 31
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 485faf189c64d8d70800000000000000
+      internalID: 9046965057740273028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enimies_53
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 0
+        width: 20
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 301574df077dc3d60800000000000000
+      internalID: 7871403129022402819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Enimies_0: 3569445469700530256
+      Enimies_1: 399810896650834675
+      Enimies_10: -4110247401860581306
+      Enimies_11: -5985843575663622551
+      Enimies_12: 107279563855447780
+      Enimies_13: 1866419949843592218
+      Enimies_14: 3743371236709910156
+      Enimies_15: -6753875703504728352
+      Enimies_16: 697187727980358291
+      Enimies_17: 5472158489017176915
+      Enimies_18: 7325713590423893633
+      Enimies_19: -4519668103701062537
+      Enimies_2: -8143305148902634836
+      Enimies_20: -6889749040305755816
+      Enimies_21: 3526151721125258490
+      Enimies_22: -7028627700377361710
+      Enimies_23: -7299740560776269529
+      Enimies_24: -7158131371410033662
+      Enimies_25: -5060611930627968998
+      Enimies_26: 5209127923696706843
+      Enimies_27: 267327566444115783
+      Enimies_28: 2569297440739282543
+      Enimies_29: 3834449466238499934
+      Enimies_3: -6112266007954398242
+      Enimies_30: 3872002155788439893
+      Enimies_31: 4288701068228595441
+      Enimies_32: -1153710245880584994
+      Enimies_33: 1584702616582879454
+      Enimies_34: 511026070805494406
+      Enimies_35: 1740322946404162089
+      Enimies_36: -7126112924003060643
+      Enimies_37: -4388762351097739245
+      Enimies_38: 5222898931892275835
+      Enimies_39: 216763732967010698
+      Enimies_4: -1375907252324586829
+      Enimies_40: 2749042701031634351
+      Enimies_41: -8254639456359117006
+      Enimies_42: 6831705887462393167
+      Enimies_43: 7984323740342438372
+      Enimies_44: -257873199972325116
+      Enimies_45: -7850081775587634406
+      Enimies_46: 1395234319185673500
+      Enimies_47: -8529027706567247968
+      Enimies_48: 6633644233851978195
+      Enimies_49: 5930512666014030230
+      Enimies_5: 1868674708393504844
+      Enimies_50: -1988336058146200077
+      Enimies_51: 1950707941585058844
+      Enimies_52: 9046965057740273028
+      Enimies_53: 7871403129022402819
+      Enimies_6: -8862131497117114820
+      Enimies_7: 4962095982774008800
+      Enimies_8: -8998821694051446708
+      Enimies_9: -1039989086450699280
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

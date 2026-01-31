@@ -52,6 +52,8 @@ namespace Enemy
         [Header("Debug")]
         [SerializeField] private bool _showDebugGizmos = true;
 
+        public Animator animator;
+
         // Components
         private Rigidbody2D _rb;
         private Transform _playerTransform;
@@ -118,6 +120,8 @@ namespace Enemy
 
         protected override void Update()
         {
+            float speed = Mathf.Abs(_rb.linearVelocity.x);
+            animator.SetFloat("Speed", speed);
             base.Update();
 
             if (!IsAlive) return;

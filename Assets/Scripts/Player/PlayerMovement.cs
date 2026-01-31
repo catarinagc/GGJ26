@@ -44,6 +44,15 @@ namespace Player
         private float EffectiveMaxSpeed => _maxSpeed * GetSpeedMultiplier();
         private float EffectiveJumpForce => _jumpForce + GetJumpForceBonus();
 
+        public Animator animator;
+
+        private void Update()
+        {
+            float speed = Mathf.Abs(_rb.linearVelocity.x);
+            animator.SetFloat("Run", speed);
+            animator.SetBool("isJumping", _rb.linearVelocity.y > 0.1f);
+        }
+
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
@@ -171,6 +180,9 @@ namespace Player
             _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, 0);
             // Use effective jump force (with mask modifier)
             _rb.AddForce(Vector2.up * EffectiveJumpForce, ForceMode2D.Impulse);
+
+            Debug.Log("is jumping!!!!!");
+            animator.SetBool("isJumping", true);
         }
 
         public void CutJump()
