@@ -258,9 +258,14 @@ namespace Combat
 
         private void SpawnSlashEffect(int comboIndex)
         {
-            if (_slashEffectPrefab == null) return;
+            if (_slashEffectPrefab == null)
+            {
+                Debug.LogWarning("[Magic Sword] SlashEffect prefab not assigned!");
+                return;
+            }
 
             Vector2 hitboxCenter = GetHitboxCenter();
+            Debug.Log($"[Magic Sword] Spawning SlashEffect at {hitboxCenter}, Aim: {_aimDirection}");
             
             // Calculate rotation based on 4-way aim direction
             float aimAngle = Mathf.Atan2(_aimDirection.y, _aimDirection.x) * Mathf.Rad2Deg;

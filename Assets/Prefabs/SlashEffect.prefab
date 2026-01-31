@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 127823ee4bdd982418c1bb7f5f2e31a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lifetime: 0.1
+  _lifetime: 0.25
   _startColor: {r: 1, g: 1, b: 1, a: 1}
   _endColor: {r: 1, g: 1, b: 1, a: 0}
   _startScale: 0.8

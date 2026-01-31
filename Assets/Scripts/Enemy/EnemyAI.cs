@@ -6,6 +6,7 @@ namespace Enemy
     /// <summary>
     /// Enemy AI with a simple State Machine: Patrol, Chase, Attack.
     /// Extends EnemyBase for health and damage handling.
+    /// Now integrates with EnemyCombat for Magic Sword attacks with dual attack ranges.
     /// </summary>
     [RequireComponent(typeof(Rigidbody2D))]
     public class EnemyAI : EnemyBase
@@ -17,12 +18,27 @@ namespace Enemy
             Attack
         }
 
+        public enum AttackType
+        {
+            Melee,
+            Wave
+        }
+
         [Header("AI Settings")]
         [SerializeField] private AIState _currentState = AIState.Patrol;
         [SerializeField] private float _detectionRange = 8f;
-        [SerializeField] private float _attackRange = 1.5f;
         [SerializeField] private float _loseTargetRange = 12f;
         [SerializeField] private LayerMask _playerLayer;
+
+        [Header("Dual Attack Ranges")]
+        [Tooltip("Range for melee attacks - enemy must be this close to attempt melee")]
+        [SerializeField] private float _meleeAttackRange = 1.5f;
+        [Tooltip("Range for wave attacks - enemy can fire projectiles from this distance")]
+        [SerializeField] private float _waveAttackRange = 6f;
+        [Tooltip("Chance (0-1) to fire a wave attack when in wave range but outside melee range")]
+        [SerializeField] private float _waveAttackChance = 0.7f;
+        [Tooltip("Minimum time between wave attack attempts when chasing")]
+        [SerializeField] private float _waveAttackInterval = 2f;
 
         [Header("Patrol Settings")]
         [SerializeField] private Transform _patrolPointA;
@@ -36,6 +52,16 @@ namespace Enemy
         [SerializeField] private float _chaseSpeed = 5f;
 
         [Header("Attack Settings")]
+        [SerializeField] private float _meleeTelegraphTime = 0.2f;
+        [SerializeField] private float _waveTelegraphTime = 0.35f;
+        [Tooltip("If true, uses EnemyCombat component for Magic Sword attacks. If false, uses legacy hitbox attack.")]
+        [SerializeField] private bool _useMagicSwordCombat = true;
+
+        [Header("Telegraph Visual")]
+        [SerializeField] private Color _telegraphColor = new Color(1f, 0.9f, 0.3f, 1f); // Yellow tint
+        [SerializeField] private bool _useTelegraphVisual = true;
+
+        [Header("Legacy Attack Settings (used if Magic Sword disabled)")]
         [SerializeField] private float _attackDamage = 10f;
         [SerializeField] private float _attackCooldown = 1f;
         [SerializeField] private float _attackKnockbackForce = 8f;
@@ -44,7 +70,7 @@ namespace Enemy
         [SerializeField] private float _attackDuration = 0.3f;
 
         [Header("Contact Damage")]
-        [SerializeField] private bool _dealContactDamage = true;
+        [SerializeField] private bool _dealContactDamage = false;
         [SerializeField] private float _contactDamage = 5f;
         [SerializeField] private float _contactKnockbackForce = 6f;
         [SerializeField] private float _contactDamageCooldown = 0.5f;
@@ -55,6 +81,8 @@ namespace Enemy
         // Components
         private Rigidbody2D _rb;
         private Transform _playerTransform;
+        private EnemyCombat _enemyCombat;
+        private SpriteRenderer _spriteRenderer;
 
         // Patrol State
         private Vector2 _patrolTargetPosition;
@@ -66,17 +94,34 @@ namespace Enemy
         private float _attackCooldownTimer;
         private bool _isAttacking;
         private float _attackTimer;
+        private float _telegraphTimer;
+        private bool _isTelegraphing;
+        private AttackType _currentAttackType;
+        private float _waveAttackTimer;
 
         // Contact Damage
         private float _contactDamageTimer;
 
+        // Visual State
+        private Color _originalColor;
+        private bool _isShowingTelegraph;
+
         // Properties
         public AIState CurrentState => _currentState;
+        public AttackType CurrentAttackType => _currentAttackType;
 
         protected override void Awake()
         {
             base.Awake();
             _rb = GetComponent<Rigidbody2D>();
+            _enemyCombat = GetComponent<EnemyCombat>();
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+
+            // Store original color for telegraph visual
+            if (_spriteRenderer != null)
+            {
+                _originalColor = _spriteRenderer.color;
+            }
 
             // Configure Rigidbody2D for consistent physics
             _rb.gravityScale = 3f;
@@ -88,6 +133,12 @@ namespace Enemy
             {
                 InitializeLocalPatrolPoints();
             }
+
+            // Warn if Magic Sword combat is enabled but no EnemyCombat component
+            if (_useMagicSwordCombat && _enemyCombat == null)
+            {
+                Debug.LogWarning($"[EnemyAI] {gameObject.name}: Magic Sword combat enabled but no EnemyCombat component found! Add EnemyCombat component or disable Magic Sword combat.");
+            }
         }
 
         private void Start()
@@ -96,7 +147,6 @@ namespace Enemy
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             if (player == null)
             {
-                // Try to find by name if not tagged
                 player = GameObject.Find("Player");
             }
 
@@ -114,6 +164,9 @@ namespace Enemy
             {
                 _patrolTargetPosition = _patrolPointA.position;
             }
+
+            // Initialize wave attack timer with some randomness
+            _waveAttackTimer = Random.Range(0f, _waveAttackInterval * 0.5f);
         }
 
         protected override void Update()
@@ -150,13 +203,28 @@ namespace Enemy
                     break;
 
                 case AIState.Chase:
-                    // Transition to Attack if close enough
-                    if (distanceToPlayer <= _attackRange && _attackCooldownTimer <= 0)
+                    // Check for attack opportunities
+                    if (CanAttack())
                     {
-                        TransitionToState(AIState.Attack);
+                        // Priority 1: Melee attack if very close
+                        if (distanceToPlayer <= _meleeAttackRange)
+                        {
+                            _currentAttackType = AttackType.Melee;
+                            TransitionToState(AIState.Attack);
+                        }
+                        // Priority 2: Wave attack if in wave range but outside melee range
+                        else if (distanceToPlayer <= _waveAttackRange && distanceToPlayer > _meleeAttackRange)
+                        {
+                            // Check wave attack timer and chance
+                            if (_waveAttackTimer <= 0 && Random.value <= _waveAttackChance)
+                            {
+                                _currentAttackType = AttackType.Wave;
+                                TransitionToState(AIState.Attack);
+                            }
+                        }
                     }
                     // Transition back to Patrol if player is too far
-                    else if (distanceToPlayer > _loseTargetRange || _playerTransform == null)
+                    if (distanceToPlayer > _loseTargetRange || _playerTransform == null)
                     {
                         TransitionToState(AIState.Patrol);
                     }
@@ -164,7 +232,7 @@ namespace Enemy
 
                 case AIState.Attack:
                     // Transition back to Chase after attack completes
-                    if (!_isAttacking)
+                    if (!_isAttacking && !_isTelegraphing)
                     {
                         TransitionToState(AIState.Chase);
                     }
@@ -202,6 +270,8 @@ namespace Enemy
                     break;
                 case AIState.Attack:
                     _isAttacking = false;
+                    _isTelegraphing = false;
+                    EndTelegraphVisual();
                     break;
             }
 
@@ -223,10 +293,8 @@ namespace Enemy
 
         private void InitializeLocalPatrolPoints()
         {
-            // Create patrol points relative to starting position
             Vector2 startPos = transform.position;
 
-            // Create empty GameObjects for patrol points
             GameObject pointA = new GameObject($"{gameObject.name}_PatrolA");
             pointA.transform.position = startPos + Vector2.left * _localPatrolDistance;
             _patrolPointA = pointA.transform;
@@ -248,14 +316,12 @@ namespace Enemy
                 if (_patrolWaitTimer <= 0)
                 {
                     _isWaiting = false;
-                    // Switch target
                     _movingToPointB = !_movingToPointB;
                     _patrolTargetPosition = _movingToPointB ? _patrolPointB.position : _patrolPointA.position;
                 }
                 return;
             }
 
-            // Move towards target
             Vector2 direction = ((Vector2)_patrolTargetPosition - (Vector2)transform.position).normalized;
             float distanceToTarget = Vector2.Distance(transform.position, _patrolTargetPosition);
 
@@ -266,7 +332,6 @@ namespace Enemy
             }
             else
             {
-                // Reached target, wait
                 _isWaiting = true;
                 _patrolWaitTimer = _patrolWaitTime;
                 _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y);
@@ -292,17 +357,36 @@ namespace Enemy
 
         #region Attack
 
+        private bool CanAttack()
+        {
+            if (_useMagicSwordCombat && _enemyCombat != null)
+            {
+                return _enemyCombat.CanAttack();
+            }
+            return _attackCooldownTimer <= 0;
+        }
+
         private void StartAttack()
         {
-            _isAttacking = true;
-            _attackTimer = _attackDuration;
-            _attackCooldownTimer = _attackCooldown;
-
-            // Stop movement during attack
+            // Stop movement during attack telegraph
             _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y);
 
-            // Perform the attack hitbox check
-            PerformAttackHitboxCheck();
+            // Face the player before attacking
+            if (_playerTransform != null)
+            {
+                float directionToPlayer = _playerTransform.position.x - transform.position.x;
+                UpdateFacing(directionToPlayer);
+            }
+
+            // Start telegraph phase with appropriate duration based on attack type
+            _isTelegraphing = true;
+            _telegraphTimer = (_currentAttackType == AttackType.Wave) ? _waveTelegraphTime : _meleeTelegraphTime;
+
+            // Start telegraph visual
+            StartTelegraphVisual();
+
+            string attackTypeStr = _currentAttackType == AttackType.Wave ? "WAVE" : "MELEE";
+            Debug.Log($"[EnemyAI] {gameObject.name}: Telegraphing {attackTypeStr} attack for {_telegraphTimer}s...");
         }
 
         private void ExecuteAttack()
@@ -310,18 +394,68 @@ namespace Enemy
             // Keep stationary during attack
             _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y);
 
-            _attackTimer -= Time.fixedDeltaTime;
-            if (_attackTimer <= 0)
+            // Telegraph phase - brief pause before attack
+            if (_isTelegraphing)
             {
-                _isAttacking = false;
+                _telegraphTimer -= Time.fixedDeltaTime;
+                if (_telegraphTimer <= 0)
+                {
+                    _isTelegraphing = false;
+                    EndTelegraphVisual();
+                    PerformActualAttack();
+                }
+                return;
+            }
+
+            // Attack duration phase
+            if (_isAttacking)
+            {
+                _attackTimer -= Time.fixedDeltaTime;
+                if (_attackTimer <= 0)
+                {
+                    _isAttacking = false;
+                }
             }
         }
 
-        private void PerformAttackHitboxCheck()
+        private void PerformActualAttack()
+        {
+            _isAttacking = true;
+
+            // Reset wave attack timer after any attack
+            _waveAttackTimer = _waveAttackInterval;
+
+            if (_useMagicSwordCombat && _enemyCombat != null)
+            {
+                // Use Magic Sword combat system
+                // For wave attacks, we force the projectile by calling a special method
+                if (_currentAttackType == AttackType.Wave)
+                {
+                    _enemyCombat.PerformWaveAttack();
+                }
+                else
+                {
+                    _enemyCombat.PerformEnemyAttack();
+                }
+                _attackTimer = _enemyCombat.AttackDuration;
+
+                string attackTypeStr = _currentAttackType == AttackType.Wave ? "WAVE" : "MELEE";
+                Debug.Log($"[EnemyAI] {gameObject.name}: Magic Sword {attackTypeStr} attack!");
+            }
+            else
+            {
+                // Use legacy hitbox attack
+                _attackTimer = _attackDuration;
+                _attackCooldownTimer = _attackCooldown;
+                PerformLegacyAttackHitboxCheck();
+                Debug.Log($"[EnemyAI] {gameObject.name}: Legacy attack!");
+            }
+        }
+
+        private void PerformLegacyAttackHitboxCheck()
         {
             Vector2 hitboxCenter = GetAttackHitboxCenter();
 
-            // Find all colliders in hitbox
             Collider2D[] hits = Physics2D.OverlapBoxAll(hitboxCenter, _attackHitboxSize, 0f, _playerLayer);
 
             foreach (Collider2D hit in hits)
@@ -329,10 +463,9 @@ namespace Enemy
                 IDamageable damageable = hit.GetComponent<IDamageable>();
                 if (damageable != null)
                 {
-                    // Calculate knockback direction (away from enemy)
                     Vector2 knockbackDir = ((Vector2)hit.transform.position - (Vector2)transform.position).normalized;
 
-                    Debug.Log($"[EnemyAI] {gameObject.name} ATTACK HIT! Target: {hit.gameObject.name}, Damage: {_attackDamage}");
+                    Debug.Log($"[EnemyAI] {gameObject.name} LEGACY ATTACK HIT! Target: {hit.gameObject.name}, Damage: {_attackDamage}");
 
                     damageable.TakeDamage(_attackDamage, knockbackDir, _attackKnockbackForce);
                 }
@@ -342,9 +475,28 @@ namespace Enemy
         private Vector2 GetAttackHitboxCenter()
         {
             Vector2 offset = _attackHitboxOffset;
-            // Flip offset based on facing direction
             offset.x *= Mathf.Sign(transform.localScale.x);
             return (Vector2)transform.position + offset;
+        }
+
+        #endregion
+
+        #region Telegraph Visual
+
+        private void StartTelegraphVisual()
+        {
+            if (!_useTelegraphVisual || _spriteRenderer == null) return;
+
+            _isShowingTelegraph = true;
+            _spriteRenderer.color = _telegraphColor;
+        }
+
+        private void EndTelegraphVisual()
+        {
+            if (!_isShowingTelegraph || _spriteRenderer == null) return;
+
+            _isShowingTelegraph = false;
+            _spriteRenderer.color = _originalColor;
         }
 
         #endregion
@@ -356,7 +508,6 @@ namespace Enemy
             if (!_dealContactDamage || !IsAlive) return;
             if (_contactDamageTimer > 0) return;
 
-            // Check if it's the player
             if (((1 << collision.gameObject.layer) & _playerLayer) != 0 || collision.gameObject.CompareTag("Player"))
             {
                 IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
@@ -387,6 +538,12 @@ namespace Enemy
             {
                 _contactDamageTimer -= Time.deltaTime;
             }
+
+            // Wave attack interval timer (only counts down while chasing)
+            if (_currentState == AIState.Chase && _waveAttackTimer > 0)
+            {
+                _waveAttackTimer -= Time.deltaTime;
+            }
         }
 
         private float GetDistanceToPlayer()
@@ -415,6 +572,9 @@ namespace Enemy
         {
             base.OnDeath();
 
+            // End any telegraph visual
+            EndTelegraphVisual();
+
             // Stop all movement
             _rb.linearVelocity = Vector2.zero;
             _rb.simulated = false;
@@ -439,9 +599,13 @@ namespace Enemy
             Gizmos.color = new Color(1f, 1f, 0f, 0.3f);
             Gizmos.DrawWireSphere(transform.position, _detectionRange);
 
-            // Attack range (red)
-            Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
-            Gizmos.DrawWireSphere(transform.position, _attackRange);
+            // Wave attack range (orange)
+            Gizmos.color = new Color(1f, 0.5f, 0f, 0.3f);
+            Gizmos.DrawWireSphere(transform.position, _waveAttackRange);
+
+            // Melee attack range (red)
+            Gizmos.color = new Color(1f, 0f, 0f, 0.4f);
+            Gizmos.DrawWireSphere(transform.position, _meleeAttackRange);
 
             // Lose target range (gray)
             Gizmos.color = new Color(0.5f, 0.5f, 0.5f, 0.2f);
@@ -461,10 +625,19 @@ namespace Enemy
         {
             if (!_showDebugGizmos) return;
 
-            // Attack hitbox
-            Gizmos.color = _isAttacking ? Color.red : new Color(1f, 0.5f, 0f, 0.5f);
-            Vector2 hitboxCenter = GetAttackHitboxCenter();
-            Gizmos.DrawWireCube(hitboxCenter, _attackHitboxSize);
+            // Attack hitbox (only show if not using Magic Sword combat)
+            if (!_useMagicSwordCombat)
+            {
+                Gizmos.color = _isAttacking ? Color.red : new Color(1f, 0.5f, 0f, 0.5f);
+                Vector2 hitboxCenter = GetAttackHitboxCenter();
+                Gizmos.DrawWireCube(hitboxCenter, _attackHitboxSize);
+            }
+
+            // Draw labels for ranges
+            #if UNITY_EDITOR
+            UnityEditor.Handles.Label(transform.position + Vector3.up * (_meleeAttackRange + 0.3f), "Melee Range");
+            UnityEditor.Handles.Label(transform.position + Vector3.up * (_waveAttackRange + 0.3f), "Wave Range");
+            #endif
         }
 
         #endregion
