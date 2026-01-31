@@ -49,6 +49,8 @@ namespace Combat
         // Cached Components
         private Rigidbody2D _rb;
 
+        private float damageMult = 1.0f;
+
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
@@ -142,9 +144,9 @@ namespace Combat
             _attackTimer = GetAttackDuration();
 
             // Get effective damage (base damage * mask multiplier)
-            float effectiveDamage = GetCurrentComboDamage() * GetDamageMultiplier();
+            float effectiveDamage = GetCurrentComboDamage() * damageMult;
 
-            Debug.Log($"[Magic Sword] Attack! Combo Hit: {_currentComboIndex + 1}/{GetMaxComboHits()}, Damage: {effectiveDamage}, Aim: {_aimDirection}");
+            Debug.Log($"[Magic Sword] Attack! Combo Hit: {_currentComboIndex + 1}/{GetMaxComboHits()}, Damage: {effectiveDamage}, Aim: {_aimDirection}, Damage Mult: {damageMult}");
 
             // Perform melee hitbox check and get hit count
             int hitCount = PerformMeleeHitboxCheck(effectiveDamage);
@@ -236,7 +238,7 @@ namespace Combat
             if (projectile != null)
             {
                 // Apply damage multiplier to projectile damage
-                float effectiveProjectileDamage = GetProjectileDamage() * GetDamageMultiplier();
+                float effectiveProjectileDamage = GetProjectileDamage() * damageMult;
 
                 projectile.Initialize(
                     fireDirection,
@@ -405,22 +407,29 @@ namespace Combat
         /// <summary>
         /// Gets the damage multiplier from the MaskManager, or 1.0 if no mask is equipped.
         /// </summary>
-        private float GetDamageMultiplier()
+        //private float GetDamageMultiplier()
+        //{
+        //    //if (_maskManager != null)
+        //    //{
+        //    //    return _maskManager.GetEffectiveDamageMultiplier();
+        //    //}
+        //    //return 1f;
+        //    retu
+        //}
+
+        public void changeDamageMult(float extraMult)
         {
-            if (_maskManager != null)
-            {
-                return _maskManager.GetEffectiveDamageMultiplier();
-            }
-            return 1f;
+            damageMult += extraMult;
+            Debug.Log(damageMult);
         }
 
         /// <summary>
         /// Sets the MaskManager reference (for dependency injection or runtime assignment).
         /// </summary>
-        public void SetMaskManager(MaskManager maskManager)
-        {
-            _maskManager = maskManager;
-        }
+        //public void SetMaskManager(MaskManager maskManager)
+        //{
+        //    _maskManager = maskManager;
+        //}
 
         #endregion
 

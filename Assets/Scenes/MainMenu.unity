@@ -750,7 +750,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5496b8b4254a6f34081344aa6abaecb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: EasyBulletHellLevel
+  sceneName: MainScene
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

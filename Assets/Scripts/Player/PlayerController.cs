@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Masks;
+using Combat;
 
 namespace Player
 {
@@ -29,11 +30,11 @@ namespace Player
         //[Header("Mask System")]
         //[SerializeField] private MaskManager _maskManager;
 
-        [Header("Player Attributes")]
-        private int startHealth;
-        private int currentHealth;
-        private int totalHealth;
-        private double currentDamageMult;
+        //[Header("Player Attributes")]
+        //private int startHealth;
+        //private int currentHealth;
+        //private int totalHealth;
+        //private double currentDamageMult;
 
         private IMovement _movement;
         private float _coyoteTimeCounter;
@@ -79,8 +80,8 @@ namespace Player
                 Debug.LogError("Input Action Asset not assigned to PlayerController!");
             }
 
-            totalHealth = startHealth;
-            currentHealth = totalHealth;
+            //totalHealth = startHealth;
+            //currentHealth = totalHealth;
         }
 
         private void OnEnable()
@@ -226,17 +227,17 @@ namespace Player
         //    _maskManager = maskManager;
         //}
 
-        public void changeHealthTotal(int amount)
-        {
-            totalHealth += amount;
-            Debug.Log(totalHealth);
-            currentHealth += amount;
-        }
+        //public void changeHealthTotal(int amount)
+        //{
+        //    totalHealth += amount;
+        //    Debug.Log(totalHealth);
+        //    currentHealth += amount;
+        //}
 
-        public void changeDamageMult(double extraMult)
-        {
-            currentDamageMult += extraMult;
-            Debug.Log(currentDamageMult);
-        }
+        //public void changeDamageMult(double extraMult)
+        //{
+        //    currentDamageMult += extraMult;
+        //    Debug.Log(currentDamageMult);
+        //}
     }
 }

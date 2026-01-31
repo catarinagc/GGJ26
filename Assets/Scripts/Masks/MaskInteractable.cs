@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Player;
+using Combat;
+using System.Collections;
+
 namespace Masks
 {
     /// <summary>
@@ -54,7 +57,7 @@ namespace Masks
         [SerializeField] private bool givesHealth = false;
         [SerializeField] private GameObject playerRef;
         [SerializeField] private int totalHealth = 10;
-        [SerializeField] private double extraMult = 0.2;
+        [SerializeField] private float extraMult = 0.2f;
 
         // Runtime state
         private Vector3 _startPosition;
@@ -220,11 +223,24 @@ namespace Masks
         {
             Debug.Log("Player Interacted");
             if (givesHealth)
-                playerRef.GetComponent<PlayerController>().changeHealthTotal(totalHealth);
+            {
+                playerRef.GetComponent<Health>().changeHealthTotal(totalHealth);
+            }
             else
-                playerRef.GetComponent<PlayerController>().changeDamageMult(extraMult);
+            {
+                playerRef.GetComponent<PlayerCombat>().changeDamageMult(extraMult);
+            }
             Destroy(gameObject, 0.1f);
-            if (_promptUI != null) _promptUI.SetActive(false);
+            if (_promptUI != null)
+            {
+                _promptUI.SetActive(false);
+            }
+        }
+
+        private IEnumerator DisableUIAfterDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            _promptUI.SetActive(false);
         }
 
         private void PlayPickupEffects()
@@ -319,7 +335,13 @@ namespace Masks
                 // Hide prompt
                 if (_promptUI != null)
                 {
-                    _promptUI.SetActive(false);
+                   // _promptUI.SetActive(false); HERE
+                    if (_promptUI != null)
+                    {
+                        StopAllCoroutines();
+                        //if (gameObject != null) 
+                        //    StartCoroutine(DisableUIAfterDelay(0.5f));
+                    }
                 }
 
                 //Debug.Log($"[MaskInteractable] Player left range of {_maskData?.MaskName ?? "Unknown Mask"}");

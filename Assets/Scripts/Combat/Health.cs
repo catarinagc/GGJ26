@@ -196,5 +196,11 @@ namespace Combat
             // Ensure current health doesn't exceed max in editor
             _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
         }
+
+        public void changeHealthTotal(int totalHealth)
+        {
+            _maxHealth += totalHealth;
+            _currentHealth += totalHealth;
+        }
     }
 }
