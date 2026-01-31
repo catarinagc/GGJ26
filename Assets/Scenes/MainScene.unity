@@ -3289,8 +3289,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicSource: {fileID: 52325539}
-  sfxSource: {fileID: 1073205827}
   backgroundMusic: {fileID: 8300000, guid: 187673ec72e216b1cb0342c4d0800be2, type: 3}
+  sfxSource: {fileID: 1073205827}
+  footstep: {fileID: 0}
+  attack: {fileID: 0}
+  jump: {fileID: 0}
+  death: {fileID: 0}
+  hit: {fileID: 0}
+  enemySpeak: {fileID: 0}
+  enemyAttack: {fileID: 0}
+  enemySteps: {fileID: 0}
+  enemyDeath: {fileID: 0}
+  enemyHit: {fileID: 0}
+  pickupHealth: {fileID: 0}
+  pickupDamage: {fileID: 0}
+  bossMusic: {fileID: 0}
+  bossSpeak: {fileID: 0}
+  bossDeath: {fileID: 0}
+  bossHit: {fileID: 0}
+  bossAttack: {fileID: 0}
 --- !u!4 &1135765311
 Transform:
   m_ObjectHideFlags: 0
@@ -4875,6 +4892,10 @@ PrefabInstance:
     - target: {fileID: 4468964463087524587, guid: 6b8216097591f984ba2409a1d8c8d24f, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6208451710454758275, guid: 6b8216097591f984ba2409a1d8c8d24f, type: 3}
+      propertyPath: m_Interpolate
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7795430993455948998, guid: 6b8216097591f984ba2409a1d8c8d24f, type: 3}
       propertyPath: m_IsActive
