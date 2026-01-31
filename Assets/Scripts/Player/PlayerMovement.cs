@@ -1,4 +1,5 @@
 using UnityEngine;
+using Masks;
 
 namespace Player
 {
@@ -26,6 +27,9 @@ namespace Player
         [SerializeField] private Transform _groundCheck;
         [SerializeField] private Vector2 _groundCheckSize = new Vector2(0.5f, 0.1f);
 
+        [Header("Mask System")]
+        [SerializeField] private MaskManager _maskManager;
+
         private Rigidbody2D _rb;
         private Vector2 _moveInput;
         private bool _isDashing;
@@ -36,10 +40,24 @@ namespace Player
         public bool IsGrounded { get; private set; }
         public Vector2 Velocity => _rb.linearVelocity;
 
+        // Effective stats (base * mask modifiers)
+        private float EffectiveMaxSpeed => _maxSpeed * GetSpeedMultiplier();
+        private float EffectiveJumpForce => _jumpForce + GetJumpForceBonus();
+
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
             _rb.gravityScale = _gravityScale;
+
+            // Auto-find MaskManager if not assigned
+            if (_maskManager == null)
+            {
+                _maskManager = GetComponent<MaskManager>();
+                if (_maskManager == null)
+                {
+                    _maskManager = FindAnyObjectByType<MaskManager>();
+                }
+            }
         }
 
         private void FixedUpdate()
@@ -72,8 +90,8 @@ namespace Player
 
         private void HandleMovement()
         {
-            // Calculate target speed
-            float targetSpeed = _moveInput.x * _maxSpeed;
+            // Calculate target speed using effective max speed (with mask modifier)
+            float targetSpeed = _moveInput.x * EffectiveMaxSpeed;
             
             // Calculate acceleration rate
             float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? _acceleration : _deceleration;
@@ -134,8 +152,8 @@ namespace Player
         private void EndDash()
         {
             _isDashing = false;
-            // Retain some momentum but clamp to max speed
-            Vector2 exitVelocity = _dashDirection.normalized * _maxSpeed;
+            // Retain some momentum but clamp to effective max speed
+            Vector2 exitVelocity = _dashDirection.normalized * EffectiveMaxSpeed;
             // Only apply x velocity, preserve y if needed or reset it?
             // Usually resetting y is safer to avoid super jumps if dashing up.
             // But if dashing horizontally, y should be 0 (gravity will take over).
@@ -151,7 +169,8 @@ namespace Player
         {
             // Reset vertical velocity for consistent jump height
             _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, 0);
-            _rb.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
+            // Use effective jump force (with mask modifier)
+            _rb.AddForce(Vector2.up * EffectiveJumpForce, ForceMode2D.Impulse);
         }
 
         public void CutJump()
@@ -185,6 +204,38 @@ namespace Player
             
             // Reset velocity for instant dash
             _rb.linearVelocity = Vector2.zero;
+        }
+
+        /// <summary>
+        /// Gets the speed multiplier from the MaskManager, or 1.0 if no mask is equipped.
+        /// </summary>
+        private float GetSpeedMultiplier()
+        {
+            if (_maskManager != null)
+            {
+                return _maskManager.GetEffectiveSpeedMultiplier();
+            }
+            return 1f;
+        }
+
+        /// <summary>
+        /// Gets the jump force bonus from the MaskManager, or 0 if no mask is equipped.
+        /// </summary>
+        private float GetJumpForceBonus()
+        {
+            if (_maskManager != null)
+            {
+                return _maskManager.GetEffectiveJumpForceBonus();
+            }
+            return 0f;
+        }
+
+        /// <summary>
+        /// Sets the MaskManager reference (for dependency injection or runtime assignment).
+        /// </summary>
+        public void SetMaskManager(MaskManager maskManager)
+        {
+            _maskManager = maskManager;
         }
 
         private void OnDrawGizmosSelected()

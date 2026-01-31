@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efa8e0bc337042042abf585eb2668507, type: 3}
+  m_Name: TricksterMask
+  m_EditorClassIdentifier: 
+  _maskName: Trickster Mask
+  _icon: {fileID: 0}
+  _description: A mischievous mask that grants increased agility. The wearer moves
+    with supernatural speed, leaving opponents struggling to keep up.
+  _speedMultiplier: 1.2
+  _damageMultiplier: 1
+  _jumpForceBonus: 0
+  _abilityPrefab: {fileID: 8435333104518765825, guid: d528a78468a809c4db59fd7ee9f0d69d, type: 3}

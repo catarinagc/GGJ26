@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Masks;
 
 namespace Combat
 {
@@ -22,6 +23,9 @@ namespace Combat
         [Header("Hitbox")]
         [SerializeField] private Transform _hitboxPivot;
         [SerializeField] private LayerMask _enemyLayer;
+
+        [Header("Mask System")]
+        [SerializeField] private MaskManager _maskManager;
 
         [Header("Debug")]
         [SerializeField] private bool _showHitboxGizmos = true;
@@ -53,6 +57,16 @@ namespace Combat
             if (_combatData == null)
             {
                 Debug.LogWarning("CombatData not assigned to PlayerCombat. Using default values.");
+            }
+
+            // Auto-find MaskManager if not assigned
+            if (_maskManager == null)
+            {
+                _maskManager = GetComponent<MaskManager>();
+                if (_maskManager == null)
+                {
+                    _maskManager = FindAnyObjectByType<MaskManager>();
+                }
             }
         }
 
@@ -128,10 +142,13 @@ namespace Combat
             _isAttacking = true;
             _attackTimer = GetAttackDuration();
 
-            Debug.Log($"[Combat] Melee Attack! Combo Hit: {_currentComboIndex + 1}/{GetMaxComboHits()}, Damage: {GetCurrentComboDamage()}");
+            // Get effective damage (base damage * mask multiplier)
+            float effectiveDamage = GetCurrentComboDamage() * GetDamageMultiplier();
 
-            // Perform hitbox check
-            PerformMeleeHitboxCheck();
+            Debug.Log($"[Combat] Melee Attack! Combo Hit: {_currentComboIndex + 1}/{GetMaxComboHits()}, Base Damage: {GetCurrentComboDamage()}, Effective Damage: {effectiveDamage}");
+
+            // Perform hitbox check with effective damage
+            PerformMeleeHitboxCheck(effectiveDamage);
 
             // Fire event
             OnAttackPerformed?.Invoke(_currentComboIndex);
@@ -152,7 +169,7 @@ namespace Combat
             }
         }
 
-        private void PerformMeleeHitboxCheck()
+        private void PerformMeleeHitboxCheck(float damage)
         {
             Vector2 hitboxCenter = GetHitboxCenter();
             Vector2 hitboxSize = GetHitboxSize();
@@ -169,10 +186,10 @@ namespace Combat
                     Vector2 knockbackDir = ((Vector2)hit.transform.position - (Vector2)transform.position).normalized;
                     
                     // Debug log when hitting IDamageable
-                    Debug.Log($"[Combat] HIT! Target: {hit.gameObject.name}, Damage: {GetCurrentComboDamage()}, Knockback: {knockbackDir}");
+                    Debug.Log($"[Combat] HIT! Target: {hit.gameObject.name}, Damage: {damage}, Knockback: {knockbackDir}");
                     
-                    // Apply damage
-                    damageable.TakeDamage(GetCurrentComboDamage(), knockbackDir, GetMeleeKnockbackForce());
+                    // Apply damage (using effective damage with mask multiplier)
+                    damageable.TakeDamage(damage, knockbackDir, GetMeleeKnockbackForce());
 
                     // Apply recoil to player
                     ApplyRecoil(-knockbackDir);
@@ -275,10 +292,13 @@ namespace Combat
             Projectile projectile = projectileObj.GetComponent<Projectile>();
             if (projectile != null)
             {
+                // Apply damage multiplier to projectile damage
+                float effectiveProjectileDamage = GetProjectileDamage() * GetDamageMultiplier();
+                
                 projectile.Initialize(
                     fireDirection,
                     GetProjectileSpeed(),
-                    GetProjectileDamage(),
+                    effectiveProjectileDamage,
                     GetRangedKnockbackForce(),
                     GetProjectileLifetime(),
                     _enemyLayer
@@ -306,6 +326,30 @@ namespace Combat
             float radians = snappedAngle * Mathf.Deg2Rad;
 
             return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians)).normalized;
+        }
+
+        #endregion
+
+        #region Mask System Integration
+
+        /// <summary>
+        /// Gets the damage multiplier from the MaskManager, or 1.0 if no mask is equipped.
+        /// </summary>
+        private float GetDamageMultiplier()
+        {
+            if (_maskManager != null)
+            {
+                return _maskManager.GetEffectiveDamageMultiplier();
+            }
+            return 1f;
+        }
+
+        /// <summary>
+        /// Sets the MaskManager reference (for dependency injection or runtime assignment).
+        /// </summary>
+        public void SetMaskManager(MaskManager maskManager)
+        {
+            _maskManager = maskManager;
         }
 
         #endregion
