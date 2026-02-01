@@ -55,10 +55,20 @@ namespace Enemy
 
         protected virtual void OnEnable()
         {
+            // Ensure _health is assigned (in case OnEnable runs before Awake)
+            if (_health == null)
+            {
+                _health = GetComponent<Health>();
+            }
+            
             if (_health != null)
             {
                 _health.OnDamageTaken += HandleDamageTaken;
                 _health.OnDeath += HandleDeath;
+            }
+            else
+            {
+                Debug.LogError($"[EnemyBase] Health component not found on {gameObject.name}!");
             }
         }
 
@@ -107,7 +117,11 @@ namespace Enemy
         {
             Debug.Log($"[Enemy] {_enemyName} has been defeated!");
 
-            _audioManager.PlaySFX(_audioManager.enemyDeath);
+            if (_audioManager != null)
+            {
+                _audioManager.PlaySFX(_audioManager.enemyDeath);
+            }
+            
             OnDeath();
 
             if (_destroyOnDeath)

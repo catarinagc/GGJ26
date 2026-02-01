@@ -118,6 +118,7 @@ namespace Combat
             // Check for death
             if (_currentHealth <= 0)
             {
+                Debug.Log($"[Health] {gameObject.name} health reached 0, calling Die()");
                 Die();
             }
         }
@@ -183,10 +184,7 @@ namespace Combat
 
         private void Die()
         {
-            if (_logDamage)
-            {
-                Debug.Log($"[Health] {gameObject.name} has died!");
-            }
+            Debug.Log($"[Health] {gameObject.name} has died! OnDeath subscribers: {OnDeath?.GetInvocationList()?.Length ?? 0}");
 
             OnDeath?.Invoke();
         }
