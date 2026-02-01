@@ -4893,6 +4893,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5715788419427370266, guid: 6b8216097591f984ba2409a1d8c8d24f, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 1572384451}
     - target: {fileID: 6208451710454758275, guid: 6b8216097591f984ba2409a1d8c8d24f, type: 3}
       propertyPath: m_Interpolate
       value: 1

@@ -234,6 +234,7 @@ MonoBehaviour:
     m_Bits: 128
   _maskManager: {fileID: 7684315658543505019}
   _showHitboxGizmos: 1
+  animator: {fileID: 6200960715464011857}
 --- !u!114 &3285186729242779085
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -51,6 +51,8 @@ namespace Combat
 
         private float damageMult = 1.0f;
 
+        public Animator animator;
+
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
@@ -89,7 +91,7 @@ namespace Combat
 
             if (_isAttacking)
             {
-                HandleAttackDuration();
+                //HandleAttackDuration();
             }
         }
 
@@ -141,7 +143,12 @@ namespace Combat
 
             // Start attack
             _isAttacking = true;
-            _attackTimer = GetAttackDuration();
+            animator.SetBool("isAttacking", true);
+            //animator.SetTrigger("Player_Attack_1");
+            //_attackTimer = GetAttackDuration();
+            //AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
+            //_attackTimer = state.length;
+
 
             // Get effective damage (base damage * mask multiplier)
             float effectiveDamage = GetCurrentComboDamage() * damageMult;
@@ -293,9 +300,12 @@ namespace Combat
             }
         }
 
-        private void EndAttack()
+        public void EndAttack()
         {
+            bool isAttacking1 = animator.GetBool("isAttack1");
+            animator.SetBool("isAttack1", !isAttacking1);
             _isAttacking = false;
+            animator.SetBool("isAttacking", false);
         }
 
         private void ResetCombo()
@@ -524,5 +534,6 @@ namespace Combat
         }
 
         #endregion
+
     }
 }
