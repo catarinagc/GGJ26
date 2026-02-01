@@ -80,13 +80,11 @@ namespace Enemy
 
         public Animator animator;
 
-        private AudioManager _audioManager;
 
         // Components
         private Rigidbody2D _rb;
         private Transform _playerTransform;
         private EnemyCombat _enemyCombat;
-        private SpriteRenderer _spriteRenderer;
 
         // Patrol State
         private Vector2 _patrolTargetPosition;
@@ -107,7 +105,6 @@ namespace Enemy
         private float _contactDamageTimer;
 
         // Visual State
-        private Color _originalColor;
         private bool _isShowingTelegraph;
 
         // Properties
@@ -118,20 +115,20 @@ namespace Enemy
         {
             base.Awake();
 
-            _audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
-            if (_audioManager == null)
-            {
-                Debug.LogWarning($"[EnemyAI] {gameObject.name}: Could not find AudioManager!");
-            }
+            //_audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
+            //if (_audioManager == null)
+            //{
+            //    Debug.LogWarning($"[EnemyAI] {gameObject.name}: Could not find AudioManager!");
+            //}
             _rb = GetComponent<Rigidbody2D>();
             _enemyCombat = GetComponent<EnemyCombat>();
-            _spriteRenderer = GetComponent<SpriteRenderer>();
+            //_spriteRenderer = GetComponent<SpriteRenderer>();
 
             // Store original color for telegraph visual
-            if (_spriteRenderer != null)
-            {
-                _originalColor = _spriteRenderer.color;
-            }
+            //if (_spriteRenderer != null)
+            //{
+            //    _originalColor = _spriteRenderer.color;
+            //}
 
             // Configure Rigidbody2D for consistent physics
             _rb.gravityScale = 3f;

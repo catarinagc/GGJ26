@@ -70,7 +70,7 @@ namespace Enemy
         private void Awake()
         {
             _audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
-            if (_audioManager != null)
+            if (_audioManager == null)
             {
                 Debug.LogError("EnemyCombat: AudioManager found in scene!");
             }
