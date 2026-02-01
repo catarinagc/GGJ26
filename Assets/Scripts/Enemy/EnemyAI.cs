@@ -174,6 +174,9 @@ namespace Enemy
         protected override void Update()
         {
             float speed = Mathf.Abs(_rb.linearVelocity.x);
+            if (speed < 0.05f)
+                speed = 0f;
+
             animator.SetFloat("Speed", speed);
             base.Update();
 
@@ -372,6 +375,9 @@ namespace Enemy
 
         private void StartAttack()
         {
+
+            animator.SetBool("isAttacking", true);
+
             // Stop movement during attack telegraph
             _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y);
 
@@ -645,5 +651,12 @@ namespace Enemy
         }
 
         #endregion
+    
+        public void EndAttack()
+        {
+            animator.SetBool("isAttacking", false);
+            bool isAttack1 = animator.GetBool("isAttack1");
+            animator.SetBool("isAttack1", !isAttack1);
+        }    
     }
 }
