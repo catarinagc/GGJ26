@@ -195,7 +195,7 @@ MonoBehaviour:
   _patrolSpeed: 3
   _patrolWaitTime: 1
   _useLocalPatrolPoints: 1
-  _localPatrolDistance: 5
+  _localPatrolDistance: 3
   _chaseSpeed: 5
   _meleeTelegraphTime: 0.2
   _waveTelegraphTime: 0.35
