@@ -83,13 +83,13 @@ namespace Combat
 
         private void OnEnable()
         {
-            // Subscribe to our own event to spawn slash effect
-            OnAttackPerformed += SpawnSlashEffect;
+            // Slash effect disabled - using animation instead
+            // OnAttackPerformed += SpawnSlashEffect;
         }
 
         private void OnDisable()
         {
-            OnAttackPerformed -= SpawnSlashEffect;
+            // OnAttackPerformed -= SpawnSlashEffect;
         }
 
         private void Update()
@@ -99,7 +99,7 @@ namespace Combat
 
             if (_isAttacking)
             {
-                //HandleAttackDuration();
+                HandleAttackDuration();
             }
         }
 
@@ -197,13 +197,26 @@ namespace Combat
 
         public void PerformAttack()
         {
-            if (_attackCooldownTimer > 0 || _isAttacking) return;
+            // Block attack only during cooldown (after full combo)
+            if (_attackCooldownTimer > 0) return;
+            
+            // If currently attacking but within combo window, allow next attack
+            if (_isAttacking && _comboTimer <= 0) return;
 
             _isAttacking = true;
             animator.SetBool("isAttacking", true);
+            
+            // Toggle attack animation (Attack_1 vs Attack_2)
+            bool isAttack1 = animator.GetBool("isAttack1");
+            animator.SetBool("isAttack1", !isAttack1);
 
             _audioManager.PlaySFX(_audioManager.attack);
 
+            // Start attack duration timer to auto-end attack
+            _attackTimer = GetAttackDuration();
+
+            // Fire attack event (triggers slash VFX)
+            OnAttackPerformed?.Invoke(_currentComboIndex);
 
             // Perform melee check immediately
             int hitCount = PerformMeleeHitboxCheck(GetCurrentComboDamage() * damageMult);
@@ -353,8 +366,6 @@ namespace Combat
 
         public void EndAttack()
         {
-            bool isAttacking1 = animator.GetBool("isAttack1");
-            animator.SetBool("isAttack1", !isAttacking1);
             _isAttacking = false;
             animator.SetBool("isAttacking", false);
         }

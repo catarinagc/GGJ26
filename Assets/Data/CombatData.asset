@@ -18,7 +18,7 @@ MonoBehaviour:
   - 18
   comboWindowTime: 0.5
   attackCooldown: 0.3
-  attackDuration: 0.15
+  attackDuration: 0.35
   meleeKnockbackForce: 5
   playerRecoilForce: 2
   projectileDamage: 8
