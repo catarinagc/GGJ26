@@ -9,4 +9,9 @@ public class MainScreenButtons : MonoBehaviour
     {
         SceneManager.LoadScene(sceneName);
     }
+
+    public void stopGameButton()
+    {
+        Application.Quit();
+    }
 }
