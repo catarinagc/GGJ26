@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Masks;
+using System.Collections;
 
 namespace Combat
 {
@@ -137,41 +138,72 @@ namespace Combat
         /// 2. If melee hits at least one IDamageable, apply damage and knockback (no projectile)
         /// 3. If melee misses, spawn a sword wave projectile in the 4-way aim direction
         /// </summary>
+        //public void PerformAttack()
+        //{
+        //    if (_attackCooldownTimer > 0 || _isAttacking) return;
+
+        //    // Start attack
+        //    _isAttacking = true;
+        //    animator.SetBool("isAttacking", true);
+        //    //animator.SetTrigger("Player_Attack_1");
+        //    //_attackTimer = GetAttackDuration();
+        //    //AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
+        //    //_attackTimer = state.length;
+
+
+        //    // Get effective damage (base damage * mask multiplier)
+        //    float effectiveDamage = GetCurrentComboDamage() * damageMult;
+
+        //    Debug.Log($"[Magic Sword] Attack! Combo Hit: {_currentComboIndex + 1}/{GetMaxComboHits()}, Damage: {effectiveDamage}, Aim: {_aimDirection}, Damage Mult: {damageMult}");
+
+        //    // Perform melee hitbox check and get hit count
+        //    int hitCount = PerformMeleeHitboxCheck(effectiveDamage);
+
+        //    // Fire attack event (triggers slash VFX)
+        //    OnAttackPerformed?.Invoke(_currentComboIndex);
+
+        //    // Conditional Sword Wave: Only spawn projectile if melee missed
+        //    if (hitCount == 0)
+        //    {
+        //        SpawnSwordWave();
+        //    }
+        //    else
+        //    {
+        //        Debug.Log($"[Magic Sword] Melee hit {hitCount} target(s) - No sword wave spawned");
+        //    }
+
+        //    // Advance combo
+        //    _currentComboIndex++;
+        //    if (_currentComboIndex >= GetMaxComboHits())
+        //    {
+        //        // Combo finished, apply cooldown and reset
+        //        _attackCooldownTimer = GetAttackCooldown();
+        //        _currentComboIndex = 0;
+        //        _comboTimer = 0;
+        //    }
+        //    else
+        //    {
+        //        // Start combo window for next hit
+        //        _comboTimer = GetComboWindowTime();
+        //    }
+        //}
+
         public void PerformAttack()
         {
             if (_attackCooldownTimer > 0 || _isAttacking) return;
 
-            // Start attack
             _isAttacking = true;
             animator.SetBool("isAttacking", true);
-            //animator.SetTrigger("Player_Attack_1");
-            //_attackTimer = GetAttackDuration();
-            //AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
-            //_attackTimer = state.length;
 
+            // Perform melee check immediately
+            int hitCount = PerformMeleeHitboxCheck(GetCurrentComboDamage() * damageMult);
 
-            // Get effective damage (base damage * mask multiplier)
-            float effectiveDamage = GetCurrentComboDamage() * damageMult;
-
-            Debug.Log($"[Magic Sword] Attack! Combo Hit: {_currentComboIndex + 1}/{GetMaxComboHits()}, Damage: {effectiveDamage}, Aim: {_aimDirection}, Damage Mult: {damageMult}");
-
-            // Perform melee hitbox check and get hit count
-            int hitCount = PerformMeleeHitboxCheck(effectiveDamage);
-
-            // Fire attack event (triggers slash VFX)
-            OnAttackPerformed?.Invoke(_currentComboIndex);
-
-            // Conditional Sword Wave: Only spawn projectile if melee missed
+            // Only spawn projectile if melee missed
             if (hitCount == 0)
             {
-                SpawnSwordWave();
-            }
-            else
-            {
-                Debug.Log($"[Magic Sword] Melee hit {hitCount} target(s) - No sword wave spawned");
+                StartCoroutine(FireProjectileWithDelay(0.3f)); // 0.3s delay like enemy
             }
 
-            // Advance combo
             _currentComboIndex++;
             if (_currentComboIndex >= GetMaxComboHits())
             {
@@ -186,6 +218,15 @@ namespace Combat
                 _comboTimer = GetComboWindowTime();
             }
         }
+
+        private IEnumerator FireProjectileWithDelay(float delay)
+        {
+            // Optional: play a telegraph effect here before firing
+            yield return new WaitForSeconds(delay);
+
+            SpawnSwordWave();
+        }
+
 
         /// <summary>
         /// Performs melee hitbox check and returns the number of enemies hit.

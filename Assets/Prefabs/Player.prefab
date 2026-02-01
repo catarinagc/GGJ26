@@ -132,7 +132,7 @@ MonoBehaviour:
   _dashDuration: 0.15
   _groundLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 192
   _groundCheck: {fileID: 4656088246231020746}
   _groundCheckSize: {x: 0.5, y: 0.1}
   _maskManager: {fileID: 7684315658543505019}

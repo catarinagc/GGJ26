@@ -152,7 +152,7 @@ MonoBehaviour:
   _glowColor: {r: 1, g: 0.8, b: 0.2, a: 1}
   _promptUI: {fileID: 0}
   _promptText: {fileID: 0}
-  _pickupPromptFormat: 'Press [E] to Pick Up: {0}'
+  _pickupPromptFormat: 'Press [E] to Pick Up: Dmg Mult'
   _spriteRenderer: {fileID: 0}
   _glowRenderer: {fileID: 0}
   _pickupParticles: {fileID: 0}

@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 5335520110300601862}
   - component: {fileID: 719732962617272272}
   m_Layer: 7
-  m_Name: BasicGuard
+  m_Name: BasicGuard_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -276,7 +276,7 @@ Animator:
   m_GameObject: {fileID: 733946433539929063}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 11283766549c342418791d6b931daf3e, type: 2}
+  m_Controller: {fileID: 9100000, guid: 0a5a256bbfab6d94f86b4b7300645f79, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

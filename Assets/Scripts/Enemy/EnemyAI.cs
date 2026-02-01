@@ -162,10 +162,18 @@ namespace Enemy
             }
 
             // Initialize patrol target
-            if (_patrolPointA != null)
+            //if (_patrolPointA != null)
+            //{
+            //    _patrolTargetPosition = _patrolPointA.position;
+            //}
+
+            if (_patrolPointA != null && _patrolPointB != null)
             {
-                _patrolTargetPosition = _patrolPointA.position;
+                _patrolTargetPosition = _movingToPointB
+                    ? _patrolPointB.position
+                    : _patrolPointA.position;
             }
+
 
             // Initialize wave attack timer with some randomness
             _waveAttackTimer = Random.Range(0f, _waveAttackInterval * 0.5f);
@@ -174,6 +182,9 @@ namespace Enemy
         protected override void Update()
         {
             float speed = Mathf.Abs(_rb.linearVelocity.x);
+            if (speed < 0.05f)
+                speed = 0f;
+
             animator.SetFloat("Speed", speed);
             base.Update();
 
@@ -326,13 +337,16 @@ namespace Enemy
                 return;
             }
 
-            Vector2 direction = ((Vector2)_patrolTargetPosition - (Vector2)transform.position).normalized;
+            Vector2 delta = (Vector2)_patrolTargetPosition - (Vector2)transform.position;
+
+            float directionX = Mathf.Sign(delta.x);
+
             float distanceToTarget = Vector2.Distance(transform.position, _patrolTargetPosition);
 
-            if (distanceToTarget > 0.2f)
+            if (Mathf.Abs(delta.x) > 0.1f)
             {
-                MoveHorizontally(direction.x, _patrolSpeed);
-                UpdateFacing(direction.x);
+                MoveHorizontally(directionX, _patrolSpeed);
+                UpdateFacing(directionX);
             }
             else
             {
@@ -340,6 +354,7 @@ namespace Enemy
                 _patrolWaitTimer = _patrolWaitTime;
                 _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y);
             }
+
         }
 
         #endregion
@@ -372,6 +387,9 @@ namespace Enemy
 
         private void StartAttack()
         {
+
+            animator.SetBool("isAttacking", true);
+
             // Stop movement during attack telegraph
             _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y);
 
@@ -645,5 +663,12 @@ namespace Enemy
         }
 
         #endregion
+    
+        public void EndAttack()
+        {
+            animator.SetBool("isAttacking", false);
+            bool isAttack1 = animator.GetBool("isAttack1");
+            animator.SetBool("isAttack1", !isAttack1);
+        }    
     }
 }

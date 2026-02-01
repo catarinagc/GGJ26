@@ -96,10 +96,10 @@ namespace Combat
             Destroy(gameObject);
         }
 
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawRay(transform.position, _direction * 2f);
-        }
+        //private void OnDrawGizmosSelected()
+        //{
+        //    Gizmos.color = Color.yellow;
+        //    Gizmos.DrawRay(transform.position, _direction * 2f);
+        //}
     }
 }
