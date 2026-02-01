@@ -713,26 +713,26 @@ MonoBehaviour:
   _fallingGraceWeight: 1
   _precisionStrikeWeight: 1
   _waveProjectilePrefab: {fileID: 2586089548860013395, guid: c144bd31021db1a40b3a23d12641be85, type: 3}
-  _waveSpeed: 12
+  _waveSpeed: 10
   _waveDamage: 15
   _waveKnockback: 10
   _waveSpawnInterval: 0.4
   _waveCount: 3
-  _waveSize: {x: 1, y: 6}
+  _waveSize: {x: 2, y: 8}
   _fallingProjectilePrefab: {fileID: 4995699070122172244, guid: ebac90eedfc656d43936310a0e70bddf, type: 3}
-  _fallingSpeed: 12
+  _fallingSpeed: 10
   _fallingDamage: 10
   _fallingKnockback: 5
-  _fallingProjectileCount: 5
-  _fallingSpawnInterval: 0.2
+  _fallingProjectileCount: 8
+  _fallingSpawnInterval: 0.3
   _fallingSpreadRange: 10
   _topSpawnPoint: {fileID: 1823116527}
   _telegraphPrefab: {fileID: 1675201834131292320, guid: 72780775fcfb6d04c8381bfc318d0eee, type: 3}
   _strikePrefab: {fileID: 8830609842859459624, guid: 50454f16f19e6c3499ddacbaa19ff13d, type: 3}
-  _telegraphDuration: 1.2
+  _telegraphDuration: 1.5
   _strikeDamage: 25
   _strikeKnockback: 15
-  _strikeRadius: 2
+  _strikeRadius: 3
   _telegraphColor: {r: 1, g: 0, b: 0, a: 0.5}
   _playerTransform: {fileID: 0}
   _playerLayer:
