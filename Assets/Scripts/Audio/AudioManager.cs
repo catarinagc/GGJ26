@@ -40,7 +40,7 @@ public class AudioManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
             Debug.Log("AudioManager instance created and set to DontDestroyOnLoad");
         }
         else

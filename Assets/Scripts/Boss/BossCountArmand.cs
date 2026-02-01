@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using Combat;
+using UnityEngine.SceneManagement;
 
 namespace Boss
 {
@@ -71,7 +72,8 @@ namespace Boss
         [Header("Visual")]
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private Color _attackingColor = new Color(1f, 0.5f, 0.5f, 1f);
-        
+        [SerializeField] private string winScene;
+
         [Header("Debug")]
         [SerializeField] private bool _showDebugGizmos = true;
 
@@ -90,6 +92,7 @@ namespace Boss
         // Properties
         public BossState CurrentState => _currentState;
         public bool IsDefeated => _isDefeated;
+        
 
         private void Awake()
         {
@@ -515,6 +518,7 @@ namespace Boss
 
             // Disable the boss
             gameObject.SetActive(false);
+            SceneManager.LoadScene(winScene);
         }
 
         private void OnDrawGizmos()

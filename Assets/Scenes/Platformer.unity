@@ -1315,6 +1315,10 @@ PrefabInstance:
       propertyPath: pickupHealth
       value: 
       objectReference: {fileID: 8300000, guid: a3dfaf16f4f7abd46bb7e123772b404f, type: 3}
+    - target: {fileID: 544350598297530662, guid: 2d9f184eb58b61bffa4c2cdfa67f9790, type: 3}
+      propertyPath: backgroundMusic
+      value: 
+      objectReference: {fileID: 8300000, guid: dc788b3fd84722e4ea337bfc871c3561, type: 3}
     - target: {fileID: 1067814874456119068, guid: 2d9f184eb58b61bffa4c2cdfa67f9790, type: 3}
       propertyPath: m_Name
       value: AudioManager
@@ -5046,7 +5050,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab13fd843cdc8024693c410e6f4b2417, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: WinScreen
+  sceneToLoad: BossLevel
 --- !u!61 &1798889171
 BoxCollider2D:
   m_ObjectHideFlags: 0
