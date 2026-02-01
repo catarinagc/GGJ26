@@ -1176,7 +1176,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 582280457}
   - {fileID: 1378193494}
@@ -1184,8 +1184,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -150}
-  m_SizeDelta: {x: 200, y: 40}
+  m_AnchoredPosition: {x: 39, y: -47.3}
+  m_SizeDelta: {x: 322.25, y: 62.6}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &488273031
 MonoBehaviour:
@@ -1498,7 +1498,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -20, y: 20}
+  m_SizeDelta: {x: -20, y: 41.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &582280458
 MonoBehaviour:
@@ -2966,10 +2966,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 18
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 3
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -2996,11 +2996,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 686644347154316153, guid: 6b8216097591f984ba2409a1d8c8d24f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 68.6
+      value: -29.84
       objectReference: {fileID: 0}
     - target: {fileID: 686644347154316153, guid: 6b8216097591f984ba2409a1d8c8d24f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 12.4
+      value: 0.42
       objectReference: {fileID: 0}
     - target: {fileID: 686644347154316153, guid: 6b8216097591f984ba2409a1d8c8d24f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3038,11 +3038,83 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5109966590374066991, guid: 6b8216097591f984ba2409a1d8c8d24f, type: 3}
+      propertyPath: _maxHealth
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6b8216097591f984ba2409a1d8c8d24f, type: 3}
+--- !u!1 &1465921380
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1465921383}
+  - component: {fileID: 1465921382}
+  - component: {fileID: 1465921381}
+  m_Layer: 0
+  m_Name: EventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1465921381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465921380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: 0.5
+  m_ForceModuleActive: 0
+--- !u!114 &1465921382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465921380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+--- !u!4 &1465921383
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465921380}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1477907157
 GameObject:
   m_ObjectHideFlags: 0
@@ -4469,6 +4541,7 @@ GameObject:
   - component: {fileID: 1640338139}
   - component: {fileID: 1640338138}
   - component: {fileID: 1640338137}
+  - component: {fileID: 1640338141}
   m_Layer: 5
   m_Name: RetryButton
   m_TagString: Untagged
@@ -4519,7 +4592,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1640338138}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1640338141}
+        m_TargetAssemblyTypeName: RetryButton, Assembly-CSharp
+        m_MethodName: retryGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1640338138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4578,6 +4663,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1640338141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640338136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48e658c90d025ee4bb9753a2174247e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1665394763
 GameObject:
   m_ObjectHideFlags: 0
@@ -9573,3 +9670,4 @@ SceneRoots:
   - {fileID: 123756539}
   - {fileID: 508629325}
   - {fileID: 1798889172}
+  - {fileID: 1465921383}

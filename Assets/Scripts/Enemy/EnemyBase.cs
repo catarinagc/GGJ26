@@ -99,7 +99,7 @@ namespace Enemy
                 _flashTimer = _hitFlashDuration;
                 _isFlashing = true;
             }
-            _audioManager.PlaySFX(_audioManager.enemyHit);
+            //_audioManager.PlaySFX(_audioManager.enemyHit);
             OnDamageTaken(damage);
         }
 
