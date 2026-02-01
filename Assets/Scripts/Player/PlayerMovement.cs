@@ -37,6 +37,7 @@ namespace Player
         private Vector2 _dashDirection;
         private bool _facingRight = true;
 
+        private AudioManager _audioManager;
         public bool IsGrounded { get; private set; }
         public Vector2 Velocity => _rb.linearVelocity;
 
@@ -57,6 +58,7 @@ namespace Player
         {
             _rb = GetComponent<Rigidbody2D>();
             _rb.gravityScale = _gravityScale;
+            _audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
 
             // Auto-find MaskManager if not assigned
             if (_maskManager == null)
@@ -101,10 +103,10 @@ namespace Player
         {
             // Calculate target speed using effective max speed (with mask modifier)
             float targetSpeed = _moveInput.x * EffectiveMaxSpeed;
-            
+
             // Calculate acceleration rate
             float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? _acceleration : _deceleration;
-            
+
             // Apply air control
             if (!IsGrounded)
             {
@@ -114,7 +116,10 @@ namespace Player
             // Apply movement force/velocity
             float newX = Mathf.MoveTowards(_rb.linearVelocity.x, targetSpeed, accelRate * Time.fixedDeltaTime);
             _rb.linearVelocity = new Vector2(newX, _rb.linearVelocity.y);
-
+            if (IsGrounded)
+            {
+                _audioManager.PlaySFX(_audioManager.footstep);
+            }
             // Handle facing direction
             if (_moveInput.x > 0 && !_facingRight)
             {
@@ -182,6 +187,7 @@ namespace Player
             _rb.AddForce(Vector2.up * EffectiveJumpForce, ForceMode2D.Impulse);
 
             Debug.Log("is jumping!!!!!");
+            _audioManager.PlaySFX(_audioManager.jump);
             animator.SetBool("isJumping", true);
         }
 
@@ -209,11 +215,11 @@ namespace Player
                 // Let's keep it free for now, but normalize.
                 direction.Normalize();
             }
-            
+
             _isDashing = true;
             _dashTimeLeft = _dashDuration;
             _dashDirection = direction;
-            
+
             // Reset velocity for instant dash
             _rb.linearVelocity = Vector2.zero;
         }

@@ -80,6 +80,8 @@ namespace Enemy
 
         public Animator animator;
 
+        private AudioManager _audioManager;
+
         // Components
         private Rigidbody2D _rb;
         private Transform _playerTransform;
@@ -115,6 +117,12 @@ namespace Enemy
         protected override void Awake()
         {
             base.Awake();
+
+            _audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
+            if (_audioManager == null)
+            {
+                Debug.LogWarning($"[EnemyAI] {gameObject.name}: Could not find AudioManager!");
+            }
             _rb = GetComponent<Rigidbody2D>();
             _enemyCombat = GetComponent<EnemyCombat>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -347,6 +355,7 @@ namespace Enemy
             {
                 MoveHorizontally(directionX, _patrolSpeed);
                 UpdateFacing(directionX);
+                _audioManager.PlaySFX(_audioManager.enemySteps);
             }
             else
             {
@@ -368,6 +377,7 @@ namespace Enemy
             Vector2 direction = ((Vector2)_playerTransform.position - (Vector2)transform.position).normalized;
 
             // Only move horizontally
+            _audioManager.PlaySFX(_audioManager.enemySteps);
             MoveHorizontally(direction.x, _chaseSpeed);
             UpdateFacing(direction.x);
         }
@@ -656,19 +666,19 @@ namespace Enemy
             }
 
             // Draw labels for ranges
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             UnityEditor.Handles.Label(transform.position + Vector3.up * (_meleeAttackRange + 0.3f), "Melee Range");
             UnityEditor.Handles.Label(transform.position + Vector3.up * (_waveAttackRange + 0.3f), "Wave Range");
-            #endif
+#endif
         }
 
         #endregion
-    
+
         public void EndAttack()
         {
             animator.SetBool("isAttacking", false);
             bool isAttack1 = animator.GetBool("isAttack1");
             animator.SetBool("isAttack1", !isAttack1);
-        }    
+        }
     }
 }

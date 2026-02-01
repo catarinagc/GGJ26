@@ -12,6 +12,8 @@ namespace Combat
     /// </summary>
     public class PlayerCombat : MonoBehaviour, ICombat
     {
+
+        private AudioManager _audioManager;
         [Header("Combat Data")]
         [SerializeField] private CombatData _combatData;
 
@@ -56,6 +58,11 @@ namespace Combat
 
         private void Awake()
         {
+            _audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
+            if (_audioManager == null)
+            {
+                Debug.LogError("AudioManager not found in scene!");
+            }
             _rb = GetComponent<Rigidbody2D>();
 
             if (_combatData == null)
@@ -195,6 +202,9 @@ namespace Combat
             _isAttacking = true;
             animator.SetBool("isAttacking", true);
 
+            _audioManager.PlaySFX(_audioManager.attack);
+
+
             // Perform melee check immediately
             int hitCount = PerformMeleeHitboxCheck(GetCurrentComboDamage() * damageMult);
 
@@ -314,10 +324,10 @@ namespace Combat
 
             Vector2 hitboxCenter = GetHitboxCenter();
             Debug.Log($"[Magic Sword] Spawning SlashEffect at {hitboxCenter}, Aim: {_aimDirection}");
-            
+
             // Calculate rotation based on 4-way aim direction
             float aimAngle = Mathf.Atan2(_aimDirection.y, _aimDirection.x) * Mathf.Rad2Deg;
-            
+
             // Vary the angle slightly based on combo index for visual variety
             float angleOffset = (comboIndex - 1) * 15f;
             Quaternion rotation = Quaternion.Euler(0, 0, aimAngle + angleOffset);
@@ -410,7 +420,7 @@ namespace Combat
         public Vector2 GetHitboxCenter()
         {
             Vector2 offset = GetHitboxOffset();
-            
+
             // Position hitbox based on aim direction
             if (_aimDirection == Vector2.up)
             {
@@ -436,13 +446,13 @@ namespace Combat
         public Vector2 GetHitboxSizeForDirection()
         {
             Vector2 size = GetHitboxSize();
-            
+
             // Swap width and height for vertical attacks
             if (_aimDirection == Vector2.up || _aimDirection == Vector2.down)
             {
                 return new Vector2(size.y, size.x);
             }
-            
+
             return size;
         }
 

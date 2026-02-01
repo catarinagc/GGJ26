@@ -11,6 +11,8 @@ namespace UI
     /// </summary>
     public class GameOverUI : MonoBehaviour
     {
+
+        private AudioManager _audioManager;
         [Header("References")]
         [SerializeField] private Health _playerHealth;
         [SerializeField] private GameObject _gameOverPanel;
@@ -30,6 +32,12 @@ namespace UI
 
         private void Awake()
         {
+
+            _audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
+            if (_audioManager == null)
+            {
+                Debug.LogError("AudioManager not found in scene!");
+            }
             // Auto-find player health if not assigned
             if (_playerHealth == null)
             {
@@ -38,7 +46,7 @@ namespace UI
                 {
                     player = GameObject.Find("Player");
                 }
-                
+
                 if (player != null)
                 {
                     _playerHealth = player.GetComponent<Health>();
@@ -92,8 +100,9 @@ namespace UI
         private void OnPlayerDeath()
         {
             if (_isGameOver) return;
-            
+
             _isGameOver = true;
+            _audioManager.PlaySFX(_audioManager.death);
             Invoke(nameof(ShowGameOver), _showDelay);
         }
 
@@ -116,11 +125,11 @@ namespace UI
         {
             // Reset time scale
             Time.timeScale = 1f;
-            
+
             // Reload current scene
             string currentScene = SceneManager.GetActiveScene().name;
             SceneManager.LoadScene(currentScene);
-            
+
             Debug.Log($"[GameOverUI] Reloading scene: {currentScene}");
         }
 
@@ -154,7 +163,7 @@ namespace UI
         {
             // Ensure time scale is reset
             Time.timeScale = 1f;
-            
+
             if (_retryButton != null)
             {
                 _retryButton.onClick.RemoveListener(OnRetryClicked);

@@ -10,6 +10,8 @@ namespace Enemy
     [RequireComponent(typeof(Health))]
     public class EnemyBase : MonoBehaviour
     {
+
+        private AudioManager _audioManager;
         [Header("Enemy Settings")]
         [SerializeField] private string _enemyName = "Enemy";
         [SerializeField] private bool _destroyOnDeath = false;
@@ -23,7 +25,7 @@ namespace Enemy
         // Components
         protected Health _health;
         protected SpriteRenderer _spriteRenderer;
-        
+
         // State
         private Color _originalColor;
         private float _flashTimer;
@@ -35,6 +37,13 @@ namespace Enemy
 
         protected virtual void Awake()
         {
+
+            _audioManager = AudioManager.Instance;
+
+            if (_audioManager == null)
+            {
+                Debug.LogError("AudioManager instance not found in the scene!");
+            }
             _health = GetComponent<Health>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -90,7 +99,7 @@ namespace Enemy
                 _flashTimer = _hitFlashDuration;
                 _isFlashing = true;
             }
-
+            _audioManager.PlaySFX(_audioManager.enemyHit);
             OnDamageTaken(damage);
         }
 
@@ -98,6 +107,7 @@ namespace Enemy
         {
             Debug.Log($"[Enemy] {_enemyName} has been defeated!");
 
+            _audioManager.PlaySFX(_audioManager.enemyDeath);
             OnDeath();
 
             if (_destroyOnDeath)

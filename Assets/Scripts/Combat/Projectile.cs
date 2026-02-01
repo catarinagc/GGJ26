@@ -9,6 +9,7 @@ namespace Combat
     [RequireComponent(typeof(Collider2D))]
     public class Projectile : MonoBehaviour
     {
+        private AudioManager _audioManager;
         [Header("Settings")]
         [SerializeField] private float _speed = 15f;
         [SerializeField] private float _damage = 8f;
@@ -23,6 +24,11 @@ namespace Combat
 
         private void Awake()
         {
+            _audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
+            if (_audioManager == null)
+            {
+                Debug.LogError("AudioManager not found in scene!");
+            }
             _rb = GetComponent<Rigidbody2D>();
             _rb.gravityScale = 0f;
             _rb.bodyType = RigidbodyType2D.Kinematic;
@@ -80,6 +86,7 @@ namespace Combat
                 {
                     damageable.TakeDamage(_damage, _direction, _knockbackForce);
                 }
+                _audioManager.PlaySFX(_audioManager.hit);
                 OnHitTarget();
             }
         }

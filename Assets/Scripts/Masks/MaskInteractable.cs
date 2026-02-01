@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using Player;
 using Combat;
 using System.Collections;
+using Unity.VisualScripting;
 
 namespace Masks
 {
@@ -67,11 +68,18 @@ namespace Masks
         private Color _originalSpriteColor;
         private bool _isInteractable = true;
 
+        private AudioManager _audioManager;
         //public MaskData MaskData => _maskData;
         public bool IsPlayerInRange => _playerInRange;
 
         private void Awake()
         {
+            _audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
+
+            if (_audioManager == null)
+            {
+                Debug.LogError("AudioManager instance not found in the scene!");
+            }
             _startPosition = transform.position;
 
             // Auto-setup components if not assigned
@@ -111,7 +119,7 @@ namespace Masks
         {
             // Setup visual based on mask data
             UpdateVisuals();
-            
+
             // Double check UI is hidden
             if (_promptUI != null)
                 _promptUI.SetActive(false);
@@ -154,7 +162,7 @@ namespace Masks
             {
                 float pulse = Mathf.Lerp(_glowMinIntensity, _glowMaxIntensity,
                     (Mathf.Sin(Time.time * _glowPulseSpeed) + 1f) * 0.5f);
-                
+
                 Color glowColor = _glowColor;
                 glowColor.a = pulse;
                 _glowRenderer.color = glowColor;
@@ -164,7 +172,7 @@ namespace Masks
                 // Apply glow to main sprite if no separate glow renderer
                 float pulse = Mathf.Lerp(_glowMinIntensity, _glowMaxIntensity,
                     (Mathf.Sin(Time.time * _glowPulseSpeed) + 1f) * 0.5f);
-                
+
                 _spriteRenderer.color = _originalSpriteColor * pulse;
             }
         }
@@ -225,10 +233,12 @@ namespace Masks
             if (givesHealth)
             {
                 playerRef.GetComponent<Health>().changeHealthTotal(totalHealth);
+                _audioManager.PlaySFX(_audioManager.pickupHealth);
             }
             else
             {
                 playerRef.GetComponent<PlayerCombat>().changeDamageMult(extraMult);
+                _audioManager.PlaySFX(_audioManager.pickupDamage);
             }
             Destroy(gameObject, 0.1f);
             if (_promptUI != null)
@@ -335,7 +345,7 @@ namespace Masks
                 // Hide prompt
                 if (_promptUI != null)
                 {
-                   // _promptUI.SetActive(false); HERE
+                    // _promptUI.SetActive(false); HERE
                     if (_promptUI != null)
                     {
                         //StopAllCoroutines();

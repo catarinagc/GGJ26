@@ -11,6 +11,7 @@ namespace Enemy
     /// </summary>
     public class EnemyCombat : MonoBehaviour
     {
+        AudioManager _audioManager;
         [Header("Combat Settings")]
         [SerializeField] private float _attackDamage = 10f;
         [SerializeField] private float _attackCooldown = 1.5f;
@@ -68,6 +69,11 @@ namespace Enemy
 
         private void Awake()
         {
+            _audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
+            if (_audioManager != null)
+            {
+                Debug.LogError("EnemyCombat: AudioManager found in scene!");
+            }
             _ownCollider = GetComponent<Collider2D>();
 
             // Auto-create projectile spawn point if not assigned
@@ -136,7 +142,7 @@ namespace Enemy
 
             // Calculate direction to player
             Vector2 directionToPlayer = ((Vector2)_playerTransform.position - (Vector2)transform.position);
-            
+
             // Snap to 4 directions
             _aimDirection = SnapTo4Directions(directionToPlayer);
         }
@@ -172,6 +178,7 @@ namespace Enemy
             // Fire attack started event
             OnAttackStarted?.Invoke();
 
+            _audioManager.PlaySFX(_audioManager.enemyAttack);
             // Animate weapon swing
             AnimateWeaponSwing();
 
@@ -350,7 +357,7 @@ namespace Enemy
             }
 
             Vector2 hitboxCenter = GetHitboxCenter();
-            
+
             // Calculate rotation based on 4-way aim direction
             float aimAngle = Mathf.Atan2(_aimDirection.y, _aimDirection.x) * Mathf.Rad2Deg;
             Quaternion rotation = Quaternion.Euler(0, 0, aimAngle);
@@ -456,7 +463,7 @@ namespace Enemy
         public Vector2 GetHitboxCenter()
         {
             Vector2 offset = _meleeHitboxOffset;
-            
+
             // Position hitbox based on aim direction
             if (_aimDirection == Vector2.up)
             {
@@ -485,7 +492,7 @@ namespace Enemy
             {
                 return new Vector2(_meleeHitboxSize.y, _meleeHitboxSize.x);
             }
-            
+
             return _meleeHitboxSize;
         }
 
