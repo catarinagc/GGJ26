@@ -52,7 +52,7 @@ namespace Combat
         // Cached Components
         private Rigidbody2D _rb;
 
-        private float damageMult = 1.0f;
+        public float damageMult = 1.0f;
 
         public Animator animator;
 

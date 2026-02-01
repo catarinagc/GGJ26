@@ -12,8 +12,8 @@ namespace Combat
     public class Health : MonoBehaviour, IDamageable
     {
         [Header("Health Settings")]
-        [SerializeField] private float _maxHealth = 100f;
-        [SerializeField] private float _currentHealth;
+        [SerializeField] public float _maxHealth = 100f;
+        [SerializeField] public float _currentHealth;
 
         [Header("Knockback Settings")]
         [SerializeField] private bool _applyKnockback = true;
