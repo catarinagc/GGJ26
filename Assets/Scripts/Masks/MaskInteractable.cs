@@ -237,11 +237,11 @@ namespace Masks
             }
         }
 
-        private IEnumerator DisableUIAfterDelay(float delay)
-        {
-            yield return new WaitForSeconds(delay);
-            _promptUI.SetActive(false);
-        }
+        //private IEnumerator DisableUIAfterDelay(float delay)
+        //{
+        //    yield return new WaitForSeconds(delay);
+        //    _promptUI.SetActive(false);
+        //}
 
         private void PlayPickupEffects()
         {
@@ -338,9 +338,10 @@ namespace Masks
                    // _promptUI.SetActive(false); HERE
                     if (_promptUI != null)
                     {
-                        StopAllCoroutines();
+                        //StopAllCoroutines();
                         //if (gameObject != null) 
                         //    StartCoroutine(DisableUIAfterDelay(0.5f));
+                        _promptUI.SetActive(false);
                     }
                 }
 
