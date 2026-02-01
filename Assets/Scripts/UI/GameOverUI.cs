@@ -70,6 +70,13 @@ namespace UI
             {
                 _canvasGroup.alpha = 0f;
             }
+
+            if (_canvasGroup != null)
+            {
+                _canvasGroup.alpha = 0f;
+                _canvasGroup.interactable = false;
+                _canvasGroup.blocksRaycasts = false;
+            }
         }
 
         private void OnEnable()
@@ -106,11 +113,32 @@ namespace UI
             Invoke(nameof(ShowGameOver), _showDelay);
         }
 
+        //private void ShowGameOver()
+        //{
+        //    if (_gameOverPanel != null)
+        //    {
+        //        _gameOverPanel.SetActive(true);
+        //    }
+
+        //    if (_pauseGameOnDeath)
+        //    {
+        //        Time.timeScale = 0f;
+        //    }
+
+        //    Debug.Log("[GameOverUI] Game Over!");
+        //}
+
         private void ShowGameOver()
         {
             if (_gameOverPanel != null)
             {
                 _gameOverPanel.SetActive(true);
+            }
+
+            if (_canvasGroup != null)
+            {
+                _canvasGroup.interactable = true;
+                _canvasGroup.blocksRaycasts = true;
             }
 
             if (_pauseGameOnDeath)
@@ -121,17 +149,16 @@ namespace UI
             Debug.Log("[GameOverUI] Game Over!");
         }
 
+
         private void OnRetryClicked()
         {
-            // Reset time scale
-            Time.timeScale = 1f;
+            Debug.Log("[GameOverUI] Retry button CLICKED");
 
-            // Reload current scene
+            Time.timeScale = 1f;
             string currentScene = SceneManager.GetActiveScene().name;
             SceneManager.LoadScene(currentScene);
-
-            Debug.Log($"[GameOverUI] Reloading scene: {currentScene}");
         }
+
 
         /// <summary>
         /// Manually trigger game over (for testing).

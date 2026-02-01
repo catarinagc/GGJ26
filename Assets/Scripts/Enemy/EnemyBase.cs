@@ -108,12 +108,7 @@ namespace Enemy
                 _flashTimer = _hitFlashDuration;
                 _isFlashing = true;
             }
-            
-            if (_audioManager != null)
-            {
-                _audioManager.PlaySFX(_audioManager.enemyHit);
-            }
-            
+            //_audioManager.PlaySFX(_audioManager.enemyHit);
             OnDamageTaken(damage);
         }
 
