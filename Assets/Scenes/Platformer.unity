@@ -1298,7 +1298,7 @@ PrefabInstance:
     - target: {fileID: 544350598297530662, guid: 2d9f184eb58b61bffa4c2cdfa67f9790, type: 3}
       propertyPath: footstep
       value: 
-      objectReference: {fileID: 8300000, guid: 157874361a92fa04b9a161bf57e5e562, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 544350598297530662, guid: 2d9f184eb58b61bffa4c2cdfa67f9790, type: 3}
       propertyPath: enemyDeath
       value: 
